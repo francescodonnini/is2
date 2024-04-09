@@ -1,5 +1,5 @@
 
-package io.github.francescodonnini.json;
+package io.github.francescodonnini.json.version;
 
 import com.google.gson.annotations.Expose;
 

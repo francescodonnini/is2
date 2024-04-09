@@ -4,7 +4,7 @@ package io.github.francescodonnini.json.issue;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import io.github.francescodonnini.json.Version;
+import io.github.francescodonnini.json.version.Version;
 
 @SuppressWarnings("unused")
 public class Fields {

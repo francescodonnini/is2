@@ -6,18 +6,28 @@ import io.github.francescodonnini.json.issue.Issues;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class Main {
     public static void main(String[] args) throws URISyntaxException, IOException, ExecutionException, InterruptedException {
-        var jiraApi = new JiraRestApi();
+        var restApi = new JiraRestApi();
+        var jiraApi = new JiraApi(restApi);
         var issues = new ArrayList<Issue>();
         var i = 0;
-        var result = jiraApi.get(JiraEndpoints.Search(String.format("project='SYNCOPE'%%20&%%20startAt=%d", i)), Issues.class);
+        var opt = jiraApi.getIssues("project='SYNCOPE'");
+        if (opt.isEmpty()) {
+            return;
+        }
+        var result = opt.get();
         while (i < result.getTotal()) {
             issues.addAll(result.getIssues());
             i += result.getIssues().size();
-            result = jiraApi.get(JiraEndpoints.Search(String.format("project='SYNCOPE'%%20&%%20startAt=%d", i)), Issues.class);
+            opt = jiraApi.getIssues("project='SYNCOPE'", i);
+            if (opt.isEmpty()) {
+                break;
+            }
+            result = opt.get();
         }
         for (var issue : issues) {
             System.out.println(issue.getId());
