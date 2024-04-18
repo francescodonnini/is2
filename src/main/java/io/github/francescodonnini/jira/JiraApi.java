@@ -1,7 +1,6 @@
-package io.github.francescodonnini;
+package io.github.francescodonnini.jira;
 
 import io.github.francescodonnini.json.issue.Issues;
-import io.github.francescodonnini.json.version.Version;
 import io.github.francescodonnini.json.version.VersionList;
 
 import java.io.IOException;
@@ -18,15 +17,15 @@ public class JiraApi {
     }
 
     public Optional<Issues> getIssues(String gql) {
-        return getIssues(gql, List.of(), 0, 50, List.of());
+        return getIssues(gql, List.of(), 0, 1000, List.of());
     }
 
     public Optional<Issues> getIssues(String gql, int startAt) {
         return getIssues(gql, List.of(), startAt, 50, List.of());
     }
-    public Optional<Issues> getIssues(String gql, List<String> fields, int startAt, int maxResults, List<String> properties) {
+    public Optional<Issues> getIssues(String jql, List<String> fields, int startAt, int maxResults, List<String> properties) {
         var request = new StringBuilder()
-                .append(JiraEndpoints.Search(gql))
+                .append(JiraEndpoints.Search(jql))
                 .append(String.format("&startAt=%d", startAt))
                 .append(String.format("&maxResults=%d", maxResults));
         if (!fields.isEmpty()) {

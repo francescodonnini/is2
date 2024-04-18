@@ -1,4 +1,4 @@
-package io.github.francescodonnini;
+package io.github.francescodonnini.jira;
 
 import com.google.gson.Gson;
 

@@ -1,28 +1,37 @@
 
 package io.github.francescodonnini.json.issue;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
+import io.github.francescodonnini.json.LongDateTypeAdapter;
+import io.github.francescodonnini.json.ShortDateTypeAdapter;
 import io.github.francescodonnini.json.version.Version;
 
 @SuppressWarnings("unused")
 public class Fields {
 
     @Expose
-    private Aggregateprogress aggregateprogress;
+    @SerializedName("aggregateprogress")
+    private AggregateProgress aggregateProgress;
     @Expose
-    private Object aggregatetimeestimate;
+    @SerializedName("aggregatetimeestimate")
+    private Object aggregateTimeEstimate;
     @Expose
-    private Object aggregatetimeoriginalestimate;
+    @SerializedName("aggregatetimeoriginalestimate")
+    private Object aggregateTimeOriginalEstimate;
     @Expose
-    private Object aggregatetimespent;
+    @SerializedName("aggregatetimespent")
+    private Object aggregateTimeSpent;
     @Expose
     private Object assignee;
     @Expose
     private List<Component> components;
     @Expose
-    private String created;
+    @JsonAdapter(LongDateTypeAdapter.class)
+    private LocalDateTime created;
     @Expose
     private Creator creator;
     @Expose
@@ -35,9 +44,11 @@ public class Fields {
     @Expose
     private List<FixVersion> fixVersions;
     @Expose
-    private List<Object> issuelinks;
+    @SerializedName("issuelinks")
+    private List<Object> issueLinks;
     @Expose
-    private Issuetype issuetype;
+    @SerializedName("issuetype")
+    private Issuetype issueType;
     @Expose
     private List<Object> labels;
     @Expose
@@ -53,7 +64,8 @@ public class Fields {
     @Expose
     private Object resolution;
     @Expose
-    private Object resolutiondate;
+    @SerializedName("resolutiondate")
+    private Object resolutionDate;
     @Expose
     private Status status;
     @Expose
@@ -61,52 +73,57 @@ public class Fields {
     @Expose
     private String summary;
     @Expose
-    private Object timeestimate;
+    @SerializedName("timeestimate")
+    private Object timeEstimate;
     @Expose
-    private Object timeoriginalestimate;
+    @SerializedName("timeoriginalestimate")
+    private Object timeOriginalEstimate;
     @Expose
-    private Object timespent;
+    @SerializedName("timespent")
+    private Object timeSpent;
     @Expose
     private String updated;
     @Expose
-    private List<Version> versions;
+    @SerializedName("versions")
+    private List<Version> affectedVersions;
     @Expose
     private Votes votes;
     @Expose
     private Watches watches;
     @Expose
-    private Long workratio;
+    @SerializedName("workratio")
+    private Long workRatio;
 
-    public Aggregateprogress getAggregateprogress() {
-        return aggregateprogress;
+    public AggregateProgress getAggregateProgress() {
+        return aggregateProgress;
     }
 
-    public void setAggregateprogress(Aggregateprogress aggregateprogress) {
-        this.aggregateprogress = aggregateprogress;
+    public void setAggregateProgress(AggregateProgress aggregateProgress) {
+        this.aggregateProgress = aggregateProgress;
     }
 
-    public Object getAggregatetimeestimate() {
-        return aggregatetimeestimate;
+    public Object getAggregateTimeEstimate() {
+        return aggregateTimeEstimate;
     }
 
-    public void setAggregatetimeestimate(Object aggregatetimeestimate) {
-        this.aggregatetimeestimate = aggregatetimeestimate;
+    public void setAggregateTimeEstimate(Object aggregateTimeEstimate) {
+        this.aggregateTimeEstimate = aggregateTimeEstimate;
     }
 
-    public Object getAggregatetimeoriginalestimate() {
-        return aggregatetimeoriginalestimate;
+    public Object getAggregateTimeOriginalEstimate() {
+        return aggregateTimeOriginalEstimate;
     }
 
-    public void setAggregatetimeoriginalestimate(Object aggregatetimeoriginalestimate) {
-        this.aggregatetimeoriginalestimate = aggregatetimeoriginalestimate;
+    public void setAggregateTimeOriginalEstimate(Object aggregateTimeOriginalEstimate) {
+        this.aggregateTimeOriginalEstimate = aggregateTimeOriginalEstimate;
     }
 
-    public Object getAggregatetimespent() {
-        return aggregatetimespent;
+    public Object getAggregateTimeSpent() {
+        return aggregateTimeSpent;
     }
 
-    public void setAggregatetimespent(Object aggregatetimespent) {
-        this.aggregatetimespent = aggregatetimespent;
+    public void setAggregateTimeSpent(Object aggregateTimeSpent) {
+        this.aggregateTimeSpent = aggregateTimeSpent;
     }
 
     public Object getAssignee() {
@@ -125,11 +142,11 @@ public class Fields {
         this.components = components;
     }
 
-    public String getCreated() {
+    public LocalDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(String created) {
+    public void setCreated(LocalDateTime created) {
         this.created = created;
     }
 
@@ -173,20 +190,20 @@ public class Fields {
         this.fixVersions = fixVersions;
     }
 
-    public List<Object> getIssuelinks() {
-        return issuelinks;
+    public List<Object> getIssueLinks() {
+        return issueLinks;
     }
 
-    public void setIssuelinks(List<Object> issuelinks) {
-        this.issuelinks = issuelinks;
+    public void setIssueLinks(List<Object> issueLinks) {
+        this.issueLinks = issueLinks;
     }
 
-    public Issuetype getIssuetype() {
-        return issuetype;
+    public Issuetype getIssueType() {
+        return issueType;
     }
 
-    public void setIssuetype(Issuetype issuetype) {
-        this.issuetype = issuetype;
+    public void setIssueType(Issuetype issueType) {
+        this.issueType = issueType;
     }
 
     public List<Object> getLabels() {
@@ -245,12 +262,12 @@ public class Fields {
         this.resolution = resolution;
     }
 
-    public Object getResolutiondate() {
-        return resolutiondate;
+    public Object getResolutionDate() {
+        return resolutionDate;
     }
 
-    public void setResolutiondate(Object resolutiondate) {
-        this.resolutiondate = resolutiondate;
+    public void setResolutionDate(Object resolutionDate) {
+        this.resolutionDate = resolutionDate;
     }
 
     public Status getStatus() {
@@ -277,28 +294,28 @@ public class Fields {
         this.summary = summary;
     }
 
-    public Object getTimeestimate() {
-        return timeestimate;
+    public Object getTimeEstimate() {
+        return timeEstimate;
     }
 
-    public void setTimeestimate(Object timeestimate) {
-        this.timeestimate = timeestimate;
+    public void setTimeEstimate(Object timeEstimate) {
+        this.timeEstimate = timeEstimate;
     }
 
-    public Object getTimeoriginalestimate() {
-        return timeoriginalestimate;
+    public Object getTimeOriginalEstimate() {
+        return timeOriginalEstimate;
     }
 
-    public void setTimeoriginalestimate(Object timeoriginalestimate) {
-        this.timeoriginalestimate = timeoriginalestimate;
+    public void setTimeOriginalEstimate(Object timeOriginalEstimate) {
+        this.timeOriginalEstimate = timeOriginalEstimate;
     }
 
-    public Object getTimespent() {
-        return timespent;
+    public Object getTimeSpent() {
+        return timeSpent;
     }
 
-    public void setTimespent(Object timespent) {
-        this.timespent = timespent;
+    public void setTimeSpent(Object timeSpent) {
+        this.timeSpent = timeSpent;
     }
 
     public String getUpdated() {
@@ -309,12 +326,12 @@ public class Fields {
         this.updated = updated;
     }
 
-    public List<Version> getVersions() {
-        return versions;
+    public List<Version> getAffectedVersions() {
+        return affectedVersions;
     }
 
-    public void setVersions(List<Version> versions) {
-        this.versions = versions;
+    public void setAffectedVersions(List<Version> affectedVersions) {
+        this.affectedVersions = affectedVersions;
     }
 
     public Votes getVotes() {
@@ -333,12 +350,12 @@ public class Fields {
         this.watches = watches;
     }
 
-    public Long getWorkratio() {
-        return workratio;
+    public Long getWorkRatio() {
+        return workRatio;
     }
 
-    public void setWorkratio(Long workratio) {
-        this.workratio = workratio;
+    public void setWorkRatio(Long workratio) {
+        this.workRatio = workratio;
     }
 
 }

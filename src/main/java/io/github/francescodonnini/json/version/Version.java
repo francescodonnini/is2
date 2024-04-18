@@ -2,6 +2,10 @@
 package io.github.francescodonnini.json.version;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.JsonAdapter;
+import io.github.francescodonnini.json.ShortDateTypeAdapter;
+
+import java.time.LocalDate;
 
 @SuppressWarnings("unused")
 public class Version {
@@ -15,7 +19,8 @@ public class Version {
     @Expose
     private String name;
     @Expose
-    private String releaseDate;
+    @JsonAdapter(ShortDateTypeAdapter.class)
+    private LocalDate releaseDate;
     @Expose
     private Boolean released;
     @Expose
@@ -53,11 +58,11 @@ public class Version {
         this.name = name;
     }
 
-    public String getReleaseDate() {
+    public LocalDate getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(String releaseDate) {
+    public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
     }
 

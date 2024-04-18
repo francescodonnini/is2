@@ -4,7 +4,7 @@ package io.github.francescodonnini.json.issue;
 import com.google.gson.annotations.Expose;
 
 @SuppressWarnings("unused")
-public class Aggregateprogress {
+public class AggregateProgress {
 
     @Expose
     private Long progress;

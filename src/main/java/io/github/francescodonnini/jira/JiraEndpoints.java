@@ -1,4 +1,4 @@
-package io.github.francescodonnini;
+package io.github.francescodonnini.jira;
 
 public class JiraEndpoints {
     public static String Project(String projectName) {
