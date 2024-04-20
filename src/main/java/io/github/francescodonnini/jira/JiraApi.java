@@ -16,14 +16,14 @@ public class JiraApi {
         this.restApi = restApi;
     }
 
-    public Optional<Issues> getIssues(String gql) {
+    public Issues getIssues(String gql) throws URISyntaxException {
         return getIssues(gql, List.of(), 0, 1000, List.of());
     }
 
-    public Optional<Issues> getIssues(String gql, int startAt) {
+    public Issues getIssues(String gql, int startAt) throws URISyntaxException {
         return getIssues(gql, List.of(), startAt, 50, List.of());
     }
-    public Optional<Issues> getIssues(String jql, List<String> fields, int startAt, int maxResults, List<String> properties) {
+    public Issues getIssues(String jql, List<String> fields, int startAt, int maxResults, List<String> properties) throws URISyntaxException {
         var request = new StringBuilder()
                 .append(JiraEndpoints.Search(jql))
                 .append(String.format("&startAt=%d", startAt))
@@ -34,18 +34,10 @@ public class JiraApi {
         if (!properties.isEmpty()) {
             request.append("&properties=").append(String.join(",", properties));
         }
-        try {
-            return Optional.ofNullable(restApi.get(request.toString(), Issues.class));
-        } catch (URISyntaxException | IOException | ExecutionException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        return restApi.get(request.toString(), Issues.class);
     }
 
-    public Optional<VersionList> getReleaseInfo(String projectName) {
-        try {
-            return Optional.ofNullable(restApi.get("https://issues.apache.org/jira/rest/api/2/project/" + projectName, VersionList.class));
-        } catch (URISyntaxException | IOException | InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
-        }
+    public VersionList getReleaseInfo(String projectName) throws URISyntaxException {
+        return restApi.get("https://issues.apache.org/jira/rest/api/2/project/" + projectName, VersionList.class);
     }
 }

@@ -2,20 +2,18 @@ package io.github.francescodonnini.jira;
 
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.concurrent.ExecutionException;
 
 public class JiraRestApi {
     private final HttpClient client = HttpClient
             .newBuilder()
             .build();
 
-    public <T> T get(String uri, Class<T> clazz) throws URISyntaxException, IOException, InterruptedException, ExecutionException {
+    public <T> T get(String uri, Class<T> clazz) throws URISyntaxException {
         var request = HttpRequest.newBuilder()
                 .uri(new URI(uri))
                 .header("Accept", "application/json")

@@ -22,20 +22,9 @@ public class GitLog {
         git = new Git(repository);
     }
 
-    public List<RevCommit> getAll() {
-        try {
-            var commits = new ArrayList<RevCommit>();
-            git.log().call().forEach(commits::add);
-            return commits;
-        } catch (GitAPIException e) {
-            return List.of();
-        }
-    }
-
-    public List<RevCommit> filterBy(Predicate<RevCommit> predicate) {
-        return getAll()
-                .stream()
-                .filter(predicate)
-                .toList();
+    public List<RevCommit> getAll() throws GitAPIException {
+        var commits = new ArrayList<RevCommit>();
+        git.log().call().forEach(commits::add);
+        return commits;
     }
 }
