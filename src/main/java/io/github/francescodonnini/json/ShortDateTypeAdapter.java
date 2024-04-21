@@ -7,12 +7,11 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 
 public class ShortDateTypeAdapter extends TypeAdapter<LocalDate> {
     @Override
-    public void write(JsonWriter jsonWriter, LocalDate localDate) {
-        throw new UnsupportedOperationException();
+    public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
+        jsonWriter.jsonValue(localDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
     }
 
     @Override

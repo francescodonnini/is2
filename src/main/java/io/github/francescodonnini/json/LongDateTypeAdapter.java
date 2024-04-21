@@ -12,8 +12,8 @@ public class LongDateTypeAdapter extends TypeAdapter<LocalDateTime> {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSxxxx");
 
     @Override
-    public void write(JsonWriter jsonWriter, LocalDateTime dateTime) {
-        throw new UnsupportedOperationException();
+    public void write(JsonWriter jsonWriter, LocalDateTime dateTime) throws IOException {
+        jsonWriter.jsonValue(dateTime.format(formatter));
     }
 
     @Override
