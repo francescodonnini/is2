@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class ShortDateTypeAdapter extends TypeAdapter<LocalDate> {
     @Override
     public void write(JsonWriter jsonWriter, LocalDate localDate) throws IOException {
-        jsonWriter.jsonValue(localDate.format(DateTimeFormatter.ISO_LOCAL_DATE));
+        jsonWriter.jsonValue(String.format("\"%s\"", localDate.format(DateTimeFormatter.ISO_LOCAL_DATE)));
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 
 public class LongDateTypeAdapter extends TypeAdapter<LocalDateTime> {
@@ -13,7 +14,7 @@ public class LongDateTypeAdapter extends TypeAdapter<LocalDateTime> {
 
     @Override
     public void write(JsonWriter jsonWriter, LocalDateTime dateTime) throws IOException {
-        jsonWriter.jsonValue(dateTime.format(formatter));
+        jsonWriter.jsonValue(String.format("\"%s\"", dateTime.atOffset(ZoneOffset.UTC).format(formatter)));
     }
 
     @Override
