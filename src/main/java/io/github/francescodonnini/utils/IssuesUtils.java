@@ -1,6 +1,5 @@
 package io.github.francescodonnini.utils;
 
-import io.github.francescodonnini.jira.JiraApi;
 import io.github.francescodonnini.jira.JiraRestApi;
 import io.github.francescodonnini.json.issue.Issue;
 
@@ -9,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IssuesUtils {
+    private IssuesUtils() {}
+    
     public static List<Issue> getAllIssues(String jql) throws URISyntaxException {
-        var restApi = new JiraRestApi();
-        var jiraApi = new JiraApi(restApi);
+        var jiraApi = new JiraRestApi();
         var issues = new ArrayList<Issue>();
         var i = 0;
         var result = jiraApi.getIssues(jql);
