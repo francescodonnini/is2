@@ -7,6 +7,7 @@ public record Issue(
         List<Release> affectedVersions,
         LocalDateTime created,
         Release fixVersion,
+        Release openingVersion,
         String key,
         String project) {
     public Release getInjectedVersion() {

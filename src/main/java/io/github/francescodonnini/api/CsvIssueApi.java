@@ -21,12 +21,14 @@ import java.util.logging.Logger;
 public class CsvIssueApi implements IssueApi {
     private static final int AFFECTED_VERSIONS_FIELD = 0;
     private static final int CREATED_FIELD = 1;
-    private static final int FIX_VERSION_FIELD = 2;
-    private static final int KEY_FIELD = 3;
-    private static final int PROJECT_FIELD = 4;
+    private static final int OPENING_FIELD = 2;
+    private static final int FIX_VERSION_FIELD = 3;
+    private static final int KEY_FIELD = 4;
+    private static final int PROJECT_FIELD = 5;
     private static final String[] HEADER = {
             "Affected Versions",
             "Created",
+            "Opening Version",
             "Fixed Version",
             "Key",
             "Project"
@@ -76,11 +78,12 @@ public class CsvIssueApi implements IssueApi {
                 av.addAll(parseAffectedVersionList(Arrays.stream(line[AFFECTED_VERSIONS_FIELD].split(",")).mapToInt(Integer::parseInt).toArray(), releases));
             }
             var created = LocalDateTime.parse(line[CREATED_FIELD]);
+            var openingVersion = parseVersion(Integer.parseInt(line[OPENING_FIELD]), releases);
             var fixVersion = parseVersion(Integer.parseInt(line[FIX_VERSION_FIELD]), releases);
+            if (fixVersion.isEmpty() || openingVersion.isEmpty()) continue;
             var key = line[KEY_FIELD];
             var project = line[PROJECT_FIELD];
-            if (fixVersion.isEmpty()) continue;
-            issues.add(new Issue(av, created, fixVersion.get(), key, project));
+            issues.add(new Issue(av, created, openingVersion.get(), fixVersion.get(), key, project));
         }
         return issues;
     }
@@ -107,6 +110,7 @@ public class CsvIssueApi implements IssueApi {
                 w.writeNext(new String[] {
                         affectedVersions,
                         issue.created().toString(),
+                        String.valueOf(issue.openingVersion().releaseNumber()),
                         String.valueOf(issue.fixVersion().releaseNumber()),
                         issue.key(),
                         issue.project()

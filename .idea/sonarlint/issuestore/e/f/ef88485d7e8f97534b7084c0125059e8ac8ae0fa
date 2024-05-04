@@ -1,17 +1,12 @@
 
 ‰
-java:S1075"ARefactor your code to get this URI from a customizable parameter.(æŠ‰†úÿÿÿÿ8´ß“ÿó1J$0cc03613-5cac-4111-bbca-7b2a7aed4639
+java:S1075
+"ARefactor your code to get this URI from a customizable parameter.(æŠ‰†úÿÿÿÿ8´ß“ÿó1J$07634d9d-67df-47a6-a1ce-27e69c34863b
 ‰
-java:S1075"ARefactor your code to get this URI from a customizable parameter.(‡»‰ìúÿÿÿÿ8·ß“ÿó1J$1a8c091f-fe0f-4c7d-9f47-523e8f4e8cfd
+java:S1075"ARefactor your code to get this URI from a customizable parameter.(‡»‰ìúÿÿÿÿ8·ß“ÿó1J$1dbaaf89-929f-428e-9efd-7366bcf8435e
 ‚
-java:S1854":Remove this useless assignment to local variable "issues".(Ü†¥•ÿÿÿÿÿ8·¬‘€ô1J$cf6c4acc-efc3-4d70-bf9d-178babc06e1b
-‚
-java:S1854":Remove this useless assignment to local variable "logger".(˜µ‚çùÿÿÿÿ8·¬‘€ô1J$2198916b-9503-4c7b-94ae-3ed2f73260d7
+java:S1854":Remove this useless assignment to local variable "issues".(Ü†¥•ÿÿÿÿÿ8·¬‘€ô1J$0a7ee668-bc47-489b-8e70-7ed90368362e
 s
-java:S1481"+Remove this unused "logger" local variable.(˜µ‚çùÿÿÿÿ8¹¬‘€ô1J$47e02d76-0bff-4a31-ba18-1e0c7b3919bd
-s
-java:S1481"+Remove this unused "issues" local variable.(Ü†¥•ÿÿÿÿÿ8¼¬‘€ô1J$9f2d67c8-fa9e-4052-9da5-508d0b09fe4c
-
-java:S1128"ERemove this unused import 'io.github.francescodonnini.model.Version'.(«Ö¨ÿÿÿÿÿ8¿¬‘€ô1J$d487bbcb-c029-4662-966b-5c92d5bba164
-w
-java:S1128"4Remove this unused import 'java.util.logging.Level'.(…µÛ¶8¿¬‘€ô1J$49d59e0e-b118-4a20-bdba-979b9ebdef09
+java:S1481"+Remove this unused "issues" local variable.(Ü†¥•ÿÿÿÿÿ8¼¬‘€ô1J$5ec84cf6-05db-4334-8cee-8362c6fc9a51
+x
+java:S1128"5Remove this unused import 'java.util.logging.Logger'.(ƒ¥óš8–àâ¡ô1J$8b7dc6b0-4857-4072-bbfe-7d0d649fdb8b

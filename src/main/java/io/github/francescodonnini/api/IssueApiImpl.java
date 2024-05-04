@@ -86,6 +86,7 @@ public class IssueApiImpl implements IssueApi {
                 affectedVersions,
                 i.getFields().getCreated(),
                 fixVersion,
+                openingVersion,
                 i.getKey(),
                 i.getFields().getProject().getName()
         );

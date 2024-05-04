@@ -2,10 +2,8 @@ package io.github.francescodonnini;
 
 import io.github.francescodonnini.api.*;
 import io.github.francescodonnini.jira.JiraRestApi;
-import io.github.francescodonnini.model.Version;
 
 import java.io.IOException;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Main {
@@ -15,7 +13,6 @@ public class Main {
     private static final String PATTERN = "%s-\\d+".formatted(PROJECT);
 
     public static void main(String[] args) throws IOException {
-        var logger = Logger.getLogger(Main.class.getName());
         var restApi = new JiraRestApi();
         var versionApi = new VersionApiImpl(restApi);
         IssueApi issueApi = new IssueApiImpl(restApi, versionApi, GIT_PATH.formatted(PROJECT.toLowerCase()));
