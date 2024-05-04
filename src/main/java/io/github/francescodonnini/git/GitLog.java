@@ -18,7 +18,6 @@ public class GitLog {
         var repository = new FileRepositoryBuilder()
                 .setGitDir(new File(path))
                 .build();
-
         git = new Git(repository);
     }
 
@@ -27,4 +26,6 @@ public class GitLog {
         git.log().call().forEach(commits::add);
         return commits;
     }
+
+
 }

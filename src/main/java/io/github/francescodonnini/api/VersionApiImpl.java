@@ -38,7 +38,7 @@ public class VersionApiImpl implements VersionApi {
 
     @Override
     public List<Release> getReleases(String projectName) {
-        var versions = getVersions(projectName).stream().filter(Version::released).sorted(Comparator.comparing(Version::releaseDate)).toList();
+        var versions = getVersions(projectName).stream().filter(Version::released).filter(v -> v.releaseDate() != null).sorted(Comparator.comparing(Version::releaseDate)).toList();
         var releases = new ArrayList<Release>();
         for (int i = 0; i < versions.size(); i++) {
             var v = versions.get(i);

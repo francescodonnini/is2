@@ -3,6 +3,27 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="$USER_HOME$/.is2/OPENJPA/issues.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="$USER_HOME$/.is2/SYNCOPE/issues.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/src/main/resources/AVRO/issues.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/src/main/resources/OPENJPA/issues.csv">
           <value>
             <Attribute>
@@ -17,7 +38,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="/src/main/resources/syncope/issues.csv">
+        <entry key="/src/main/resources/SYNCOPE/issues.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

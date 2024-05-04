@@ -47,8 +47,6 @@ m
 =src/main/java/io/github/francescodonnini/api/CsvIssueApi.java,9/1/9153d5f8f25a1a2f6fb2b42dcfa3b7bffb97a721
 7
 pom.xml,4/4/442292b8a7efeabbe4cc176709b833b1792140ec
-t
-Dsrc/main/java/io/github/francescodonnini/proportion/Incremental.java,a/0/a097ee080b61175a2533a65760486d4ca5c654b7
 s
 Csrc/main/java/io/github/francescodonnini/proportion/Proportion.java,5/c/5cef8452f186150f32580a5425301e26dd813af2
 k
@@ -58,3 +56,7 @@ o
 :
 
 .gitignore,a/5/a5cc2925ca8258af241be7e5b0381edf30266302
+m
+=src/main/java/io/github/francescodonnini/config/Settings.java,8/8/8878c0f07b90ba6d11b9569e1bf4177a8806820f
+p
+@src/main/java/io/github/francescodonnini/config/IniSettings.java,1/6/16fd944ba495f116b7cd02bfe97eb10a9d73274c

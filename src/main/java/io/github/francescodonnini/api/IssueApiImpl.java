@@ -12,17 +12,20 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class IssueApiImpl implements IssueApi {
+    private final Logger logger = Logger.getLogger(IssueApiImpl.class.getName());
     private final JiraRestApi restApi;
     private final VersionApi versionApi;
-    private final GitLog logs;
+    private final String gitBasePath;
 
-    public IssueApiImpl(JiraRestApi restApi, VersionApi versionApi, String gitPath) throws IOException {
+    public IssueApiImpl(JiraRestApi restApi, VersionApi versionApi, String gitBasePath) throws IOException {
         this.restApi = restApi;
         this.versionApi = versionApi;
-        logs = new GitLog(gitPath);
+        this.gitBasePath = gitBasePath;
     }
 
     /**
@@ -40,7 +43,7 @@ public class IssueApiImpl implements IssueApi {
     public List<Issue> getIssues(String projectName, String pattern) {
         try {
             var versions = versionApi.getReleases(projectName);
-            var mapping = getTicketCommitMapping(pattern);
+            var mapping = getTicketCommitMapping(projectName, pattern);
             var issueNetworkEntities = restApi.getIssues("project='%s' AND type=bug AND (status=closed OR status=resolved) AND resolution=fixed".formatted(projectName))
                     .getIssueList().stream()
                     // Prendo solamente i ticket di Jira che hanno un commit che ne cita la chiave
@@ -65,11 +68,12 @@ public class IssueApiImpl implements IssueApi {
                 var fixVersion = o1.get();
                 var openingVersion = o2.get();
                 // Non è presente una release con data di pubblicazione >= alla data di creazione del ticket
-                var issue = getIssue(i, affectedVersions, openingVersion, fixVersion);
+                var issue = getIssue(i, mapping, affectedVersions, openingVersion, fixVersion);
                 issue.ifPresent(issues::add);
             }
             return issues;
-        } catch (URISyntaxException | GitAPIException e) {
+        } catch (IOException | URISyntaxException | GitAPIException e) {
+            logger.log(Level.SEVERE, e.getMessage());
             return List.of();
         }
     }
@@ -78,7 +82,7 @@ public class IssueApiImpl implements IssueApi {
         return releases.stream().filter(r -> r.releaseDate().isAfter(created.toLocalDate())).findFirst();
     }
 
-    private Optional<Issue> getIssue(IssueNetworkEntity i, List<Release> affectedVersions, Release openingVersion, Release fixVersion) {
+    private Optional<Issue> getIssue(IssueNetworkEntity i, Map<String, List<RevCommit>> commits, List<Release> affectedVersions, Release openingVersion, Release fixVersion) {
         if (!affectedVersions.isEmpty() && !checkForConsistency(affectedVersions, openingVersion, fixVersion)) {
             return Optional.empty();
         }
@@ -87,6 +91,7 @@ public class IssueApiImpl implements IssueApi {
                 i.getFields().getCreated(),
                 fixVersion,
                 openingVersion,
+                commits.get(i.getKey()),
                 i.getKey(),
                 i.getFields().getProject().getName()
         );
@@ -121,13 +126,14 @@ public class IssueApiImpl implements IssueApi {
      *                commit.
      * @return una mappa chiave ticket, commit il cui messaggio contiene la chiave del ticket.
      */
-    private Map<String, RevCommit> getTicketCommitMapping(String pattern) throws GitAPIException {
+    private Map<String, List<RevCommit>> getTicketCommitMapping(String projectName, String pattern) throws GitAPIException, IOException {
+        var logs = new GitLog(gitBasePath.formatted(projectName.toLowerCase()));
         var p = Pattern.compile(pattern);
-        var mapping = new HashMap<String, RevCommit>();
+        var mapping = new HashMap<String, List<RevCommit>>();
         for (var commit : logs.getAll()) {
             var matcher = p.matcher(commit.getFullMessage());
             if (matcher.find()) {
-                mapping.put(matcher.group(), commit);
+                mapping.computeIfAbsent(matcher.group(), v -> new ArrayList<>()).add(commit);
             }
         }
         return mapping;
