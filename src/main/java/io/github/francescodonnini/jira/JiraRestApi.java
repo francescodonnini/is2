@@ -34,7 +34,7 @@ public class JiraRestApi {
         if (!properties.isEmpty()) {
             request.append("&properties=").append(String.join(",", properties));
         }
-        return get(request.toString(), Issues.class);
+        return get(request.toString().replace(" ", "%20"), Issues.class);
     }
 
     public VersionList getReleaseInfo(String projectName) throws URISyntaxException {

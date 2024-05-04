@@ -7,8 +7,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 import io.github.francescodonnini.json.LongDateTypeAdapter;
-import io.github.francescodonnini.json.ShortDateTypeAdapter;
-import io.github.francescodonnini.json.version.Version;
+import io.github.francescodonnini.json.version.VersionNetworkEntity;
 
 @SuppressWarnings("unused")
 public class Fields {
@@ -65,7 +64,8 @@ public class Fields {
     private Object resolution;
     @Expose
     @SerializedName("resolutiondate")
-    private Object resolutionDate;
+    @JsonAdapter(LongDateTypeAdapter.class)
+    private LocalDateTime resolutionDate;
     @Expose
     private Status status;
     @Expose
@@ -85,7 +85,7 @@ public class Fields {
     private String updated;
     @Expose
     @SerializedName("versions")
-    private List<Version> affectedVersions;
+    private List<VersionNetworkEntity> affectedVersions;
     @Expose
     private Votes votes;
     @Expose
@@ -262,11 +262,11 @@ public class Fields {
         this.resolution = resolution;
     }
 
-    public Object getResolutionDate() {
+    public LocalDateTime getResolutionDate() {
         return resolutionDate;
     }
 
-    public void setResolutionDate(Object resolutionDate) {
+    public void setResolutionDate(LocalDateTime resolutionDate) {
         this.resolutionDate = resolutionDate;
     }
 
@@ -326,11 +326,11 @@ public class Fields {
         this.updated = updated;
     }
 
-    public List<Version> getAffectedVersions() {
+    public List<VersionNetworkEntity> getAffectedVersions() {
         return affectedVersions;
     }
 
-    public void setAffectedVersions(List<Version> affectedVersions) {
+    public void setAffectedVersions(List<VersionNetworkEntity> affectedVersions) {
         this.affectedVersions = affectedVersions;
     }
 

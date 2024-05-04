@@ -1,6 +1,7 @@
 package io.github.francescodonnini.json.issue;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
@@ -14,7 +15,8 @@ public class Issues {
     @Expose
     private int total;
     @Expose
-    private List<Issue> issues;
+    @SerializedName("issues")
+    private List<IssueNetworkEntity> issueList;
 
     public String getExpand() {
         return expand;
@@ -48,11 +50,11 @@ public class Issues {
         this.total = total;
     }
 
-    public List<Issue> getIssues() {
-        return issues;
+    public List<IssueNetworkEntity> getIssueList() {
+        return issueList;
     }
 
-    public void setIssues(List<Issue> issues) {
-        this.issues = issues;
+    public void setIssueList(List<IssueNetworkEntity> issueList) {
+        this.issueList = issueList;
     }
 }

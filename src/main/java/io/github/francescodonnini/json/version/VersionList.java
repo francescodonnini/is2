@@ -6,13 +6,13 @@ import java.util.List;
 
 public class VersionList {
     @Expose
-    private List<Version> versions;
+    private List<VersionNetworkEntity> versions;
 
-    public List<Version> getVersions() {
+    public List<VersionNetworkEntity> getVersions() {
         return versions;
     }
 
-    public void setVersions(List<Version> versions) {
+    public void setVersions(List<VersionNetworkEntity> versions) {
         this.versions = versions;
     }
 }

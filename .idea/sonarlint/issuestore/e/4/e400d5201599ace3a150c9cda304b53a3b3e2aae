@@ -1,0 +1,23 @@
+
+É
+java:S11861"€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(ĞÚõÓşÿÿÿÿ8±ùÍŸô1J$6387919c-7b16-47a1-99c0-de51d4c94b47
+´
+java:S11301"lRemove the declaration of thrown exception 'java.io.IOException', as it cannot be thrown from method's body.(ĞÚõÓşÿÿÿÿ8»ùÍŸô1J$1118b599-f096-4692-9270-a03be9b85738
+Ï
+java:S11301"†Remove the declaration of thrown exception 'com.opencsv.exceptions.CsvValidationException', as it cannot be thrown from method's body.(ĞÚõÓşÿÿÿÿ8»ùÍŸô1J$20ecfebd-de6f-457b-aa95-2abfd026896c
+†
+java:S11721">Remove these unused method parameters "reader", "projectName".(ĞÚõÓşÿÿÿÿ8ÅùÍŸô1J$d8fa4f55-e0a9-434d-9989-7727ce91bf83
+u
+java:S1068"2Remove this unused "RELEASE_NUMBER" private field.(˜»§”8ÇùÍŸô1J$7183e6c9-732c-4d76-aad5-1d7502a094a7
+n
+java:S1068"&Remove this unused "ID" private field.(­“±µÿÿÿÿÿ8ÇùÍŸô1J$fead394b-67c9-4add-8684-2ae495035b85
+p
+java:S1068"(Remove this unused "NAME" private field.(ªøş¤ÿÿÿÿÿ8ÈùÍŸô1J$90cf8dee-3c39-492c-9fb4-33832c0d6220
+x
+java:S1068"0Remove this unused "RELEASE_DATE" private field.(”ÔıÀÿÿÿÿÿ8ÈùÍŸô1J$186f7bdd-d256-4d51-bcd4-2fd56a182521
+m
+java:S1068"*Remove this unused "HEADER" private field.(¼Èå8ÈùÍŸô1J$34ee9eef-c645-4f0f-8756-5e29e43eb615
+v
+java:S1068".Remove this unused "versionApi" private field.(Ê©®şÿÿÿÿÿ8ÈùÍŸô1J$5f48ffc2-a124-4ca0-9e08-8278f195b669
+
+java:S11441"9Remove this unused private "createVersionFromCsv" method.(ĞÚõÓşÿÿÿÿ8…ıÎŸô1J$9f1cd80f-aa5a-4335-b013-ebe9338fad4c

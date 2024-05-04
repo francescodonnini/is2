@@ -8,7 +8,7 @@ import io.github.francescodonnini.json.ShortDateTypeAdapter;
 import java.time.LocalDate;
 
 @SuppressWarnings("unused")
-public class Version {
+public class VersionNetworkEntity {
 
     @Expose
     private Boolean archived;

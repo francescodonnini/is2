@@ -4,7 +4,7 @@ package io.github.francescodonnini.json.issue;
 import com.google.gson.annotations.Expose;
 
 @SuppressWarnings("unused")
-public class Issue {
+public class IssueNetworkEntity {
 
     @Expose
     private String expand;

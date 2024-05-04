@@ -1,0 +1,17 @@
+
+‰
+java:S1075"ARefactor your code to get this URI from a customizable parameter.(æŠ‰†úÿÿÿÿ8´ß“ÿó1J$0cc03613-5cac-4111-bbca-7b2a7aed4639
+‰
+java:S1075"ARefactor your code to get this URI from a customizable parameter.(‡»‰ìúÿÿÿÿ8·ß“ÿó1J$1a8c091f-fe0f-4c7d-9f47-523e8f4e8cfd
+‚
+java:S1854":Remove this useless assignment to local variable "issues".(Ü†¥•ÿÿÿÿÿ8·¬‘€ô1J$cf6c4acc-efc3-4d70-bf9d-178babc06e1b
+‚
+java:S1854":Remove this useless assignment to local variable "logger".(˜µ‚çùÿÿÿÿ8·¬‘€ô1J$2198916b-9503-4c7b-94ae-3ed2f73260d7
+s
+java:S1481"+Remove this unused "logger" local variable.(˜µ‚çùÿÿÿÿ8¹¬‘€ô1J$47e02d76-0bff-4a31-ba18-1e0c7b3919bd
+s
+java:S1481"+Remove this unused "issues" local variable.(Ü†¥•ÿÿÿÿÿ8¼¬‘€ô1J$9f2d67c8-fa9e-4052-9da5-508d0b09fe4c
+
+java:S1128"ERemove this unused import 'io.github.francescodonnini.model.Version'.(«Ö¨ÿÿÿÿÿ8¿¬‘€ô1J$d487bbcb-c029-4662-966b-5c92d5bba164
+w
+java:S1128"4Remove this unused import 'java.util.logging.Level'.(…µÛ¶8¿¬‘€ô1J$49d59e0e-b118-4a20-bdba-979b9ebdef09
