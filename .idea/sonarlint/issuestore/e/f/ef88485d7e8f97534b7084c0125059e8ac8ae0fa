@@ -1,12 +1,12 @@
 
 ‰
 java:S1075
-"ARefactor your code to get this URI from a customizable parameter.(æŠ‰†úÿÿÿÿ8´ß“ÿó1J$07634d9d-67df-47a6-a1ce-27e69c34863b
+"ARefactor your code to get this URI from a customizable parameter.(æŠ‰†úÿÿÿÿ8´ß“ÿó1J$ac4d8463-be82-43ed-b935-49816bda9901
 ‰
-java:S1075"ARefactor your code to get this URI from a customizable parameter.(‡»‰ìúÿÿÿÿ8·ß“ÿó1J$1dbaaf89-929f-428e-9efd-7366bcf8435e
+java:S1075"ARefactor your code to get this URI from a customizable parameter.(‡»‰ìúÿÿÿÿ8·ß“ÿó1J$88dd5b95-9737-46f4-a0f8-aabd062e4c52
 ‚
-java:S1854":Remove this useless assignment to local variable "issues".(Ü†¥•ÿÿÿÿÿ8·¬‘€ô1J$0a7ee668-bc47-489b-8e70-7ed90368362e
+java:S1854":Remove this useless assignment to local variable "issues".(Ü†¥•ÿÿÿÿÿ8·¬‘€ô1J$0361206e-f49f-403e-ade2-66fde7d9d884
 s
-java:S1481"+Remove this unused "issues" local variable.(Ü†¥•ÿÿÿÿÿ8¼¬‘€ô1J$5ec84cf6-05db-4334-8cee-8362c6fc9a51
-x
-java:S1128"5Remove this unused import 'java.util.logging.Logger'.(ƒ¥óš8–àâ¡ô1J$8b7dc6b0-4857-4072-bbfe-7d0d649fdb8b
+java:S1481"+Remove this unused "issues" local variable.(Ü†¥•ÿÿÿÿÿ8¼¬‘€ô1J$f45febc3-0196-48c0-a759-96a9ee3ba452
+R
+java:S1128"5Remove this unused import 'java.util.logging.Logger'.(ƒ¥óš8æ¡„¤ô1

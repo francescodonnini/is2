@@ -101,7 +101,7 @@ public class CsvIssueApi implements IssueApi {
             var file = new File(issuePath);
             if (file.getParentFile().mkdirs()) {
                 var message = "directory %s has been created.".formatted(file.getParentFile());
-                logger.log(Level.SEVERE, message);
+                logger.log(Level.INFO, message);
             }
             var w = new CSVWriter(new FileWriter(file));
             w.writeNext(HEADER);
