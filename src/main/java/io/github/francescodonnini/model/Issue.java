@@ -13,6 +13,10 @@ public record Issue(
         List<RevCommit> commits,
         String key,
         String project) {
+
+    public Issue withAffectedVersions(List<Release> affectedVersions) {
+        return new Issue(affectedVersions, created, fixVersion, openingVersion, commits, key, project);
+    }
     public Release getInjectedVersion() {
         return affectedVersions.getFirst();
     }

@@ -4,29 +4,40 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
-import io.github.francescodonnini.utils.FileUtils;
-import io.github.francescodonnini.api.VersionApi;
+import io.github.francescodonnini.csv.entities.VersionLocalEntity;
 import io.github.francescodonnini.model.Version;
+import io.github.francescodonnini.utils.FileUtils;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-public class CsvVersionApi extends CsvAbstractApi<VersionLocalEntity, Version> implements VersionApi {
-    private final Logger logger = Logger.getLogger(CsvVersionApi.class.getName());
-    private final VersionApi versionApi;
+public class CsvVersionApi {
+    private final String defaultPath;
 
-    public CsvVersionApi(String path, VersionApi versionApi) {
-        super(path);
-        this.versionApi = versionApi;
+    public CsvVersionApi(String defaultPath) {
+        this.defaultPath = defaultPath;
     }
 
-    @Override
-    protected VersionLocalEntity toCsv(Version model) {
+    public List<Version> getLocal() throws FileNotFoundException {
+        return getVersions(defaultPath);
+    }
+
+    public List<Version> getLocal(String path) throws FileNotFoundException {
+        return getVersions(path);
+    }
+
+    private List<Version> getVersions(String path) throws FileNotFoundException {
+        var beans = new CsvToBeanBuilder<VersionLocalEntity>(new FileReader(path))
+                .withType(VersionLocalEntity.class)
+                .build()
+                .parse();
+        return beans.stream().map(this::fromCsv).toList();
+    }
+
+    private VersionLocalEntity toCsv(Version model) {
         var bean = new VersionLocalEntity();
         bean.setArchived(model.archived());
         bean.setId(model.id());
@@ -36,27 +47,15 @@ public class CsvVersionApi extends CsvAbstractApi<VersionLocalEntity, Version> i
         return bean;
     }
 
-    @Override
-    protected Version fromCsv(VersionLocalEntity bean) {
+    private Version fromCsv(VersionLocalEntity bean) {
         return new Version(bean.isArchived(), bean.getId(), bean.getName(), bean.isReleased(), bean.getReleaseDate());
     }
 
-    @Override
-    public List<Version> getVersions() {
-        try {
-            var beans = new CsvToBeanBuilder<VersionLocalEntity>(new FileReader(path))
-                .withType(VersionLocalEntity.class)
-                .build()
-                .parse();
-            return beans.stream().map(this::fromCsv).toList();
-        } catch (FileNotFoundException e) {
-            var versions = versionApi.getVersions();
-            fetchAndSave(versions);
-            return versions;
-        }
+    public void saveLocal(List<Version> versions) throws CsvRequiredFieldEmptyException, CsvDataTypeMismatchException, IOException {
+        saveLocal(versions, defaultPath);
     }
 
-    private void fetchAndSave(List<Version> versions) {
+    public void saveLocal(List<Version> versions, String path) throws IOException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
         var beans = versions.stream().map(this::toCsv).toList();
         FileUtils.createFileIfNotExists(path);
         try (var writer = new FileWriter(path)) {
@@ -64,13 +63,6 @@ public class CsvVersionApi extends CsvAbstractApi<VersionLocalEntity, Version> i
             for (var b : beans) {
                 beanToCsv.write(b);
             }
-        } catch (IOException | CsvDataTypeMismatchException | CsvRequiredFieldEmptyException e) {
-            logger.log(Level.SEVERE, e.getMessage());
         }
-    }
-
-    @Override
-    public String getProjectName() {
-        return versionApi.getProjectName();
     }
 }

@@ -1,4 +1,4 @@
-package io.github.francescodonnini.csv;
+package io.github.francescodonnini.csv.entities;
 
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvCustomBindByName;
@@ -6,24 +6,22 @@ import io.github.francescodonnini.csv.converters.LocalDateConverter;
 
 import java.time.LocalDate;
 
-public class VersionLocalEntity {
-    @CsvBindByName(column = "Archived", required = true)
-    private boolean archived;
+public class ReleaseLocalEntity {
+    @CsvBindByName(column = "Release Number", required = true)
+    private int releaseNumber;
     @CsvBindByName(column = "Id", required = true)
     private String id;
     @CsvBindByName(column = "Name", required = true)
     private String name;
-    @CsvBindByName(column = "Released", required = true)
-    private boolean released;
-    @CsvCustomBindByName(column = "Release Date", converter = LocalDateConverter.class)
+    @CsvCustomBindByName(column = "Release Date", converter = LocalDateConverter.class, required = true)
     private LocalDate releaseDate;
 
-    public boolean isArchived() {
-        return archived;
+    public int getReleaseNumber() {
+        return releaseNumber;
     }
 
-    public void setArchived(boolean archived) {
-        this.archived = archived;
+    public void setReleaseNumber(int releaseNumber) {
+        this.releaseNumber = releaseNumber;
     }
 
     public String getId() {
@@ -48,13 +46,5 @@ public class VersionLocalEntity {
 
     public void setReleaseDate(LocalDate releaseDate) {
         this.releaseDate = releaseDate;
-    }
-
-    public boolean isReleased() {
-        return released;
-    }
-
-    public void setReleased(boolean released) {
-        this.released = released;
     }
 }
