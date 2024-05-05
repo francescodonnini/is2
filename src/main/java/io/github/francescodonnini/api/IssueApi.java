@@ -5,5 +5,6 @@ import io.github.francescodonnini.model.Issue;
 import java.util.List;
 
 public interface IssueApi {
-    List<Issue> getIssues(String projectName, String pattern);
+    List<Issue> getIssues();
+    String getProjectName();
 }

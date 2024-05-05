@@ -1,5 +1,7 @@
-package io.github.francescodonnini.api;
+package io.github.francescodonnini.json;
 
+import io.github.francescodonnini.api.IssueApi;
+import io.github.francescodonnini.api.ReleaseApi;
 import io.github.francescodonnini.git.GitLog;
 import io.github.francescodonnini.jira.JiraRestApi;
 import io.github.francescodonnini.json.issue.IssueNetworkEntity;
@@ -16,22 +18,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-public class IssueApiImpl implements IssueApi {
-    private final Logger logger = Logger.getLogger(IssueApiImpl.class.getName());
+public class JsonIssueApi implements IssueApi {
+    private final Logger logger = Logger.getLogger(JsonIssueApi.class.getName());
+    private final String projectName;
+    private final String pattern;
+    private final GitLog git;
     private final JiraRestApi restApi;
-    private final VersionApi versionApi;
-    private final String gitBasePath;
+    private final ReleaseApi releaseApi;
 
-    public IssueApiImpl(JiraRestApi restApi, VersionApi versionApi, String gitBasePath) throws IOException {
+    public JsonIssueApi(String projectName, String pattern, GitLog git, JiraRestApi restApi, ReleaseApi releaseApi) {
+        this.projectName = projectName;
+        this.pattern = pattern;
+        this.git = git;
         this.restApi = restApi;
-        this.versionApi = versionApi;
-        this.gitBasePath = gitBasePath;
+        this.releaseApi = releaseApi;
     }
 
     /**
      * Prende gli issues da Jira relativi al progetto @projectName che hanno un commit col pattern @pattern.
-     * @param projectName nome del progetto di cui si vogliono prendere gli issues.
-     * @param pattern pattern dell'identificativo del ticket di cui deve essere trovato riscontro su un commit.
      * @return la lista degli issue che soddisfano le seguenti proprietà:
      * - sono stati recuperati dalla query: "project='<Project Name>' AND type=bug AND (status=closed OR status=resolved) AND resolution=fixed"
      * - ogni ticket viene citato (tramite identificativo) in almeno un commit della relativa repository.
@@ -40,10 +44,10 @@ public class IssueApiImpl implements IssueApi {
      * - OV <= FV
      */
     @Override
-    public List<Issue> getIssues(String projectName, String pattern) {
+    public List<Issue> getIssues() {
         try {
-            var versions = versionApi.getReleases(projectName);
-            var mapping = getTicketCommitMapping(projectName, pattern);
+            var versions = releaseApi.getReleases();
+            var mapping = getTicketCommitMapping(pattern);
             var issueNetworkEntities = restApi.getIssues("project='%s' AND type=bug AND (status=closed OR status=resolved) AND resolution=fixed".formatted(projectName))
                     .getIssueList().stream()
                     // Prendo solamente i ticket di Jira che hanno un commit che ne cita la chiave
@@ -76,6 +80,11 @@ public class IssueApiImpl implements IssueApi {
             logger.log(Level.SEVERE, e.getMessage());
             return List.of();
         }
+    }
+
+    @Override
+    public String getProjectName() {
+        return projectName;
     }
 
     private Optional<Release> getOpeningVersion(List<Release> releases, LocalDateTime created) {
@@ -126,11 +135,10 @@ public class IssueApiImpl implements IssueApi {
      *                commit.
      * @return una mappa chiave ticket, commit il cui messaggio contiene la chiave del ticket.
      */
-    private Map<String, List<RevCommit>> getTicketCommitMapping(String projectName, String pattern) throws GitAPIException, IOException {
-        var logs = new GitLog(gitBasePath.formatted(projectName.toLowerCase()));
+    private Map<String, List<RevCommit>> getTicketCommitMapping(String pattern) throws GitAPIException, IOException {
         var p = Pattern.compile(pattern);
         var mapping = new HashMap<String, List<RevCommit>>();
-        for (var commit : logs.getAll()) {
+        for (var commit : git.getAll()) {
             var matcher = p.matcher(commit.getFullMessage());
             if (matcher.find()) {
                 mapping.computeIfAbsent(matcher.group(), v -> new ArrayList<>()).add(commit);
