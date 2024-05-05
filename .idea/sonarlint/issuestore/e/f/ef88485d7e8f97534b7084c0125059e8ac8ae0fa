@@ -1,18 +1,5 @@
 
-”
-java:S1192""LDefine a constant instead of duplicating this literal "gitBasePath" 3 times.(ºıÅùÿÿÿÿ8ªœø©ô1J$220d2ffa-628a-4e05-9f0c-fa6caeb192b5
-g
-java:S2629"$Invoke method(s) only conditionally.(íÔ½à8®œø©ô1J$1300d929-4079-4a6b-a90c-15557e30a527
-g
-java:S26290"$Invoke method(s) only conditionally.(ë›½¨8¯œø©ô1J$9ae240be-e30d-4391-b458-460e044f4bfd
-l
-java:S26292"$Invoke method(s) only conditionally.(‡Åùµûÿÿÿÿ8¯œø©ô1J$1e464570-3c9b-413e-8df8-0367eb70a0f8
-x
-java:S1128"5Remove this unused import 'org.eclipse.jgit.api.Git'.(»Ú¿ê8§ø©ô1J$6237f5e1-ab57-46ba-a49e-fc99a44481f6
-}
-java:S1128
-";Remove this unused import 'org.eclipse.jgit.lib.Constants'.(ÔùÃm8¨ø©ô1J$e4140e49-5c96-4191-9391-f147e161c5f9
-…
-java:S1128"=Remove this unused import 'org.eclipse.jgit.revwalk.RevWalk'.(ÊÁïùûÿÿÿÿ8©ø©ô1J$6e9aae3b-dfe1-4ca3-9e5c-7d06ab34db23
-‡
-java:S1128"?Remove this unused import 'org.eclipse.jgit.treewalk.TreeWalk'.(ĞºõÙşÿÿÿÿ8©ø©ô1J$e30f2aa6-9dba-4e16-adad-aa7d14e5f54d
+n
+java:S1192""LDefine a constant instead of duplicating this literal "gitBasePath" 3 times.(ºıÅùÿÿÿÿ8ÒÔ–Ãô1
+A
+java:S2629"$Invoke method(s) only conditionally.(íÔ½à8ÔÔ–Ãô1
