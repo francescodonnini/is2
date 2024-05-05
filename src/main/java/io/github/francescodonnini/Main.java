@@ -17,18 +17,13 @@ import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Main {
-    private static final Logger logger = Logger.getLogger(Main.class.getName());
-
     public static void main(String[] args) throws IOException, ConfigurationException, GitAPIException, CsvRequiredFieldEmptyException, CsvDataTypeMismatchException {
         if (args.length != 1) {
-            logger.log(Level.SEVERE, "Expected one argument, but got %d%n".formatted(args.length));
             System.exit(1);
         }
-        var projectName = "SYNCOPE";
+        var projectName = "AVRO";
         var pattern = "%s-\\d+".formatted(projectName);
         var settings = new IniSettings(args[0]);
         var restApi = new JiraRestApi();
@@ -46,6 +41,7 @@ public class Main {
         issueApi.getIssues();
         var proportion = new Incremental(issueApi, releaseApi);
         var issues = proportion.fillOut();
+
         localIssueApi.saveLocal(issues, path + "/labelled_issues.csv");
     }
 }

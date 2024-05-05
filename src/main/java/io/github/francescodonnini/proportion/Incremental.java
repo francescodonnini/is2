@@ -43,8 +43,8 @@ public class Incremental implements Proportion {
             var p = calculateProportion(batch);
             var fv = issue.fixVersion().releaseNumber();
             var ov = issue.openingVersion().releaseNumber();
-            var den = fv - ov == 0 ? 1 : fv - ov;
-            var iv = (int) Math.floor(fv - (fv - ov)*p);
+            var den = ((fv - ov) == 0) ? 1 : (fv - ov);
+            var iv = (int) Math.floor(fv - den*p);
             issues.add(issue.withAffectedVersions(getRange(releases, iv, ov)));
         }
         return issues;

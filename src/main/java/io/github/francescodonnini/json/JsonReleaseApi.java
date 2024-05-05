@@ -1,6 +1,5 @@
 package io.github.francescodonnini.json;
 
-import io.github.francescodonnini.api.ReleaseApi;
 import io.github.francescodonnini.api.VersionApi;
 import io.github.francescodonnini.model.Release;
 import io.github.francescodonnini.model.Version;
