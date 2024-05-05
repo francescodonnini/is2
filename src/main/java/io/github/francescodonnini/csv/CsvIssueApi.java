@@ -83,7 +83,7 @@ public class CsvIssueApi extends CsvAbstractApi<IssueLocalEntity, Issue> impleme
         try {
             var beans = new CsvToBeanBuilder<IssueLocalEntity>(new FileReader(path))
                     .withType(IssueLocalEntity.class)
-                    .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS)
+                    .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_QUOTES)
                     .build()
                     .parse();
             return beans.stream().map(this::fromCsv).toList();

@@ -80,3 +80,7 @@ q
 Asrc/main/java/io/github/francescodonnini/json/issue/Progress.java,b/3/b3835eda14cdc43cfaf742b8c2dd14c3f654d3da
 n
 >src/main/java/io/github/francescodonnini/json/issue/Votes.java,9/e/9e4a932ada2305de53ae3b7517c8fa14ea806dee
+x
+Hsrc/main/java/io/github/francescodonnini/csv/BaseVersionLocalEntity.java,7/9/79a55519b1396a9921d19670fcb3468007c5d0f8
+v
+Fsrc/test/java/io/github/francescodonnini/csv/IssueLocalEntityTest.java,b/6/b658c8a16c4c12ee58e9bfd2ad300dddefe97ce5
