@@ -76,3 +76,7 @@ Osrc/main/java/io/github/francescodonnini/csv/converters/LocalDateConverter.java
 Ssrc/main/java/io/github/francescodonnini/csv/converters/LocalDateTimeConverter.java,5/5/550e26de676fbdb7fecedbe10fd1fa05bd52ab7f
 t
 Dsrc/main/java/io/github/francescodonnini/csv/ReleaseLocalEntity.java,2/4/249047cc06f60fe06a196d0d42c403f772a6b4bd
+q
+Asrc/main/java/io/github/francescodonnini/json/issue/Progress.java,b/3/b3835eda14cdc43cfaf742b8c2dd14c3f654d3da
+n
+>src/main/java/io/github/francescodonnini/json/issue/Votes.java,9/e/9e4a932ada2305de53ae3b7517c8fa14ea806dee

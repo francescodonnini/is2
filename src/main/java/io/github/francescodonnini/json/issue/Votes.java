@@ -2,6 +2,7 @@
 package io.github.francescodonnini.json.issue;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
 public class Votes {
@@ -11,7 +12,8 @@ public class Votes {
     @Expose
     private String self;
     @Expose
-    private Long votes;
+    @SerializedName("votes")
+    private Long numOfVotes;
 
     public Boolean getHasVoted() {
         return hasVoted;
@@ -29,12 +31,12 @@ public class Votes {
         this.self = self;
     }
 
-    public Long getVotes() {
-        return votes;
+    public Long getNumOfVotes() {
+        return numOfVotes;
     }
 
-    public void setVotes(Long votes) {
-        this.votes = votes;
+    public void setNumOfVotes(Long numOfVotes) {
+        this.numOfVotes = numOfVotes;
     }
 
 }

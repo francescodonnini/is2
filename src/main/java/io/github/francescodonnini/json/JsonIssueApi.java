@@ -76,7 +76,7 @@ public class JsonIssueApi implements IssueApi {
                 issue.ifPresent(issues::add);
             }
             return issues;
-        } catch (IOException | URISyntaxException | GitAPIException e) {
+        } catch (URISyntaxException | GitAPIException e) {
             logger.log(Level.SEVERE, e.getMessage());
             return List.of();
         }
@@ -135,7 +135,7 @@ public class JsonIssueApi implements IssueApi {
      *                commit.
      * @return una mappa chiave ticket, commit il cui messaggio contiene la chiave del ticket.
      */
-    private Map<String, List<RevCommit>> getTicketCommitMapping(String pattern) throws GitAPIException, IOException {
+    private Map<String, List<RevCommit>> getTicketCommitMapping(String pattern) throws GitAPIException {
         var p = Pattern.compile(pattern);
         var mapping = new HashMap<String, List<RevCommit>>();
         for (var commit : git.getAll()) {

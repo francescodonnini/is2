@@ -2,21 +2,23 @@
 package io.github.francescodonnini.json.issue;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 @SuppressWarnings("unused")
 public class Progress {
 
     @Expose
-    private Long progress;
+    @SerializedName("progress")
+    private Long value;
     @Expose
     private Long total;
 
-    public Long getProgress() {
-        return progress;
+    public Long getValue() {
+        return value;
     }
 
-    public void setProgress(Long progress) {
-        this.progress = progress;
+    public void setValue(Long value) {
+        this.value = value;
     }
 
     public Long getTotal() {

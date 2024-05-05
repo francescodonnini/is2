@@ -1,7 +1,6 @@
 package io.github.francescodonnini.utils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.ToIntFunction;
 
 public class CollectionUtils {
