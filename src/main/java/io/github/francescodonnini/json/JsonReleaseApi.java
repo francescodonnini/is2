@@ -1,0 +1,31 @@
+package io.github.francescodonnini.json;
+
+import io.github.francescodonnini.api.ReleaseApi;
+import io.github.francescodonnini.api.VersionApi;
+import io.github.francescodonnini.model.Release;
+import io.github.francescodonnini.model.Version;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
+public class JsonReleaseApi implements ReleaseApi {
+    private final VersionApi versionApi;
+
+    public JsonReleaseApi(VersionApi versionApi) {
+        this.versionApi = versionApi;
+    }
+
+    @Override
+    public List<Release> getReleases() {
+        var versions = versionApi.getVersions().stream()
+                .filter(Version::released).filter(v -> v.releaseDate() != null)
+                .sorted(Comparator.comparing(Version::releaseDate)).toList();
+        var releases = new ArrayList<Release>();
+        for (int i = 0; i < versions.size(); i++) {
+            var v = versions.get(i);
+            releases.add(new Release(i, v.id(), v.name(), v.releaseDate()));
+        }
+        return releases;
+    }
+}

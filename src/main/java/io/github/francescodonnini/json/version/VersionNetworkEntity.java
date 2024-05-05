@@ -3,7 +3,7 @@ package io.github.francescodonnini.json.version;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
-import io.github.francescodonnini.json.ShortDateTypeAdapter;
+import io.github.francescodonnini.json.adapters.ShortDateTypeAdapter;
 
 import java.time.LocalDate;
 

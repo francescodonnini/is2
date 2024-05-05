@@ -6,7 +6,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
-import io.github.francescodonnini.json.LongDateTypeAdapter;
+import io.github.francescodonnini.json.adapters.LongDateTypeAdapter;
 import io.github.francescodonnini.json.version.VersionNetworkEntity;
 
 @SuppressWarnings("unused")

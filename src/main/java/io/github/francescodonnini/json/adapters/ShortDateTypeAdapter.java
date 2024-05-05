@@ -1,4 +1,4 @@
-package io.github.francescodonnini.json;
+package io.github.francescodonnini.json.adapters;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
