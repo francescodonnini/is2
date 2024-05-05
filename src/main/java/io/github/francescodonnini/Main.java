@@ -31,8 +31,8 @@ public class Main {
             logger.log(Level.SEVERE, "Expected one argument, but got %d%n".formatted(args.length));
             System.exit(1);
         }
-        var projectName = "OPENJPA";
-        var pattern = "OPENJPA-\\d+";
+        var projectName = "AVRO";
+        var pattern = "AVRO-\\d+";
         var settings = new IniSettings(args[0]);
         var restApi = new JiraRestApi();
         var git = new GitLog(settings.getString("gitBasePath").formatted(projectName.toLowerCase()));

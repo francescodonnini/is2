@@ -2,6 +2,7 @@ package io.github.francescodonnini.csv;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import io.github.francescodonnini.utils.FileUtils;
@@ -47,10 +48,16 @@ public class CsvIssueApi extends CsvAbstractApi<IssueLocalEntity, Issue> impleme
 
     @Override
     protected Issue fromCsv(IssueLocalEntity bean) {
-        var affectedVersions = bean.getAffectedVersions().stream().map(this::getByReleaseNumber).toList();
+        List<Release> affectedVersions = new ArrayList<>();
+        if (bean.getAffectedVersions() != null) {
+            affectedVersions.addAll(bean.getAffectedVersions().stream().map(this::getByReleaseNumber).toList());
+        }
         var fixVersion = getByReleaseNumber(bean.getFixVersion());
         var openingVersion = getByReleaseNumber(bean.getOpeningVersion());
-        var commitList = bean.getCommits().stream().map(this::getByObjectId).toList();
+        var commitList = new ArrayList<RevCommit>();
+        if (bean.getCommits() != null) {
+            commitList.addAll(bean.getCommits().stream().map(this::getByObjectId).toList());
+        }
         return new Issue(
                 affectedVersions,
                 bean.getCreated(),
@@ -64,7 +71,7 @@ public class CsvIssueApi extends CsvAbstractApi<IssueLocalEntity, Issue> impleme
 
     private RevCommit getByObjectId(String id) {
         var objectId = ObjectId.fromString(id);
-        return CollectionUtils.binarySearch(commits, commit -> commit.getId().compareTo(objectId));
+        return commits.stream().filter(c -> c.getId().equals(objectId)).findFirst().orElse(null);
     }
 
     private Release getByReleaseNumber(int releaseNumber) {
@@ -76,6 +83,7 @@ public class CsvIssueApi extends CsvAbstractApi<IssueLocalEntity, Issue> impleme
         try {
             var beans = new CsvToBeanBuilder<IssueLocalEntity>(new FileReader(path))
                     .withType(IssueLocalEntity.class)
+                    .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_SEPARATORS)
                     .build()
                     .parse();
             return beans.stream().map(this::fromCsv).toList();

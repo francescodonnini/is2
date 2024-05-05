@@ -1,7 +1,8 @@
 package io.github.francescodonnini.csv;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvDate;
+import com.opencsv.bean.CsvCustomBindByName;
+import io.github.francescodonnini.csv.converters.LocalDateConverter;
 
 import java.time.LocalDate;
 
@@ -14,8 +15,7 @@ public class VersionLocalEntity {
     private String name;
     @CsvBindByName(column = "Released", required = true)
     private boolean released;
-    @CsvDate("yyyy-MM-dd")
-    @CsvBindByName(column = "Release Date")
+    @CsvCustomBindByName(column = "Release Date", converter = LocalDateConverter.class)
     private LocalDate releaseDate;
 
     public boolean isArchived() {

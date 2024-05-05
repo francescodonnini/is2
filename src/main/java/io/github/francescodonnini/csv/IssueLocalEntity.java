@@ -2,18 +2,17 @@ package io.github.francescodonnini.csv;
 
 import com.opencsv.bean.CsvBindAndSplitByName;
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvDate;
+import com.opencsv.bean.CsvCustomBindByName;
+import io.github.francescodonnini.csv.converters.LocalDateTimeConverter;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class IssueLocalEntity {
-    @CsvBindByName(column = "Affected Versions", required = true)
-    @CsvBindAndSplitByName(elementType = Integer.class, splitOn = ",", writeDelimiter = ",")
+    @CsvBindAndSplitByName(column = "Affected Versions", elementType = Integer.class, splitOn = ",", writeDelimiter = ",", collectionType = List.class)
     List<Integer> affectedVersions;
 
-    @CsvDate("yyyy-MM-dd hh:mm:ss")
-    @CsvBindByName(column = "Created", required = true)
+    @CsvCustomBindByName(column = "Created", required = true, converter = LocalDateTimeConverter.class)
     LocalDateTime created;
 
     @CsvBindByName(column = "Fix Version", required = true)

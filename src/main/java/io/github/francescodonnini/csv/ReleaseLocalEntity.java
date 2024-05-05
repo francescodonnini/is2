@@ -1,7 +1,8 @@
 package io.github.francescodonnini.csv;
 
 import com.opencsv.bean.CsvBindByName;
-import com.opencsv.bean.CsvDate;
+import com.opencsv.bean.CsvCustomBindByName;
+import io.github.francescodonnini.csv.converters.LocalDateConverter;
 
 import java.time.LocalDate;
 
@@ -12,8 +13,7 @@ public class ReleaseLocalEntity {
     private String id;
     @CsvBindByName(column = "Name", required = true)
     private String name;
-    @CsvDate("dd/MM/yyyy")
-    @CsvBindByName(column = "Release Date", required = true)
+    @CsvCustomBindByName(column = "Release Date", converter = LocalDateConverter.class, required = true)
     private LocalDate releaseDate;
 
     public int getReleaseNumber() {

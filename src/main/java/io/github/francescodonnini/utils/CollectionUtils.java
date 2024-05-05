@@ -1,6 +1,7 @@
 package io.github.francescodonnini.utils;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.ToIntFunction;
 
 public class CollectionUtils {
@@ -18,11 +19,11 @@ public class CollectionUtils {
                 low = mid + 1;
             } else {
                 if (cmp == 0) {
-                    break;
+                    return midVal;
                 }
                 high = mid - 1;
             }
         }
-        return releases.get(mid);
+        return null;
     }
 }
