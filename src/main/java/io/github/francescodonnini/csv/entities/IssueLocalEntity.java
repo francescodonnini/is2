@@ -1,4 +1,4 @@
-package io.github.francescodonnini.csv;
+package io.github.francescodonnini.csv.entities;
 
 import com.opencsv.bean.CsvBindAndSplitByName;
 import com.opencsv.bean.CsvBindByName;

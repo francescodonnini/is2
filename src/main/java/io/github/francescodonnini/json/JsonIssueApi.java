@@ -1,6 +1,5 @@
 package io.github.francescodonnini.json;
 
-import io.github.francescodonnini.api.IssueApi;
 import io.github.francescodonnini.api.ReleaseApi;
 import io.github.francescodonnini.git.GitLog;
 import io.github.francescodonnini.jira.JiraRestApi;
@@ -10,7 +9,6 @@ import io.github.francescodonnini.model.Release;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import java.io.IOException;
 import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -18,7 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-public class JsonIssueApi implements IssueApi {
+public class JsonIssueApi  {
     private final Logger logger = Logger.getLogger(JsonIssueApi.class.getName());
     private final String projectName;
     private final String pattern;
@@ -43,10 +41,11 @@ public class JsonIssueApi implements IssueApi {
      * - IV <= OV
      * - OV <= FV
      */
-    @Override
-    public List<Issue> getIssues() {
+    public List<Issue> getRemoteIssues() {
         try {
-            var versions = releaseApi.getReleases();
+            // Ordino le releases in ordine crescente rispetto alla data di creazione
+            var releases = releaseApi.getReleases().stream()
+                    .sorted(Comparator.comparing(Release::releaseDate)).toList();
             var mapping = getTicketCommitMapping(pattern);
             var issueNetworkEntities = restApi.getIssues("project='%s' AND type=bug AND (status=closed OR status=resolved) AND resolution=fixed".formatted(projectName))
                     .getIssueList().stream()
@@ -55,12 +54,12 @@ public class JsonIssueApi implements IssueApi {
                     .toList();
             var issues = new ArrayList<Issue>();
             for (var i : issueNetworkEntities) {
-                var affectedVersions = getAffectedVersions(versions, i);
+                var affectedVersions = getAffectedVersions(releases, i);
                 // Al momento sto prendendo come fixVersion la prima release (ordine cronologico) nel campo fixVersions
                 // Un'alternativa potrebbe essere quella di prendere come fixVersion la prima utile che ha data di rilascio
                 // >= alla data di risoluzione.
-                var o1 = getFixVersion(versions, i.getFields().getResolutionDate());
-                var o2 = getOpeningVersion(versions, i.getFields().getCreated());
+                var o1 = getFixVersion(releases, i.getFields().getResolutionDate());
+                var o2 = getOpeningVersion(releases, i.getFields().getCreated());
                 if (o1.isEmpty() || o2.isEmpty()) continue;
                 // Arrivati a questo punto si sta leggendo un ticket che possiede il campo fixVersions non vuoto.
                 // Si seleziona la release con getFixVersion (attualmente prende la prima release nella lista).
@@ -80,11 +79,6 @@ public class JsonIssueApi implements IssueApi {
             logger.log(Level.SEVERE, e.getMessage());
             return List.of();
         }
-    }
-
-    @Override
-    public String getProjectName() {
-        return projectName;
     }
 
     private Optional<Release> getOpeningVersion(List<Release> releases, LocalDateTime created) {
@@ -107,15 +101,19 @@ public class JsonIssueApi implements IssueApi {
         return Optional.of(issue);
     }
 
-    private boolean checkForConsistency(List<Release> affectedVersions, Release openingVersion, Release fix) {
+    // checkForConsistency controlla se la tripla (affectedVersions, openingVersion, fixVersion) è consistente, cioè:
+    // 1. IV < FV
+    // 2. IV <= OV
+    // 3. OV <= FV
+    private boolean checkForConsistency(List<Release> affectedVersions, Release openingVersion, Release fixVersion) {
         var injected = affectedVersions.getFirst();
-        if (!injected.isBefore(fix)) {
+        if (!injected.isBefore(fixVersion)) {
             return false;
         }
         if (injected.isAfter(openingVersion)) {
             return false;
         }
-        return !openingVersion.isAfter(fix);
+        return !openingVersion.isAfter(fixVersion);
     }
 
     /**

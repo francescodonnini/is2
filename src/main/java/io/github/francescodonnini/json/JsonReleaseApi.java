@@ -1,6 +1,5 @@
 package io.github.francescodonnini.json;
 
-import io.github.francescodonnini.api.ReleaseApi;
 import io.github.francescodonnini.api.VersionApi;
 import io.github.francescodonnini.model.Release;
 import io.github.francescodonnini.model.Version;
@@ -9,14 +8,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class JsonReleaseApi implements ReleaseApi {
+public class JsonReleaseApi {
     private final VersionApi versionApi;
 
     public JsonReleaseApi(VersionApi versionApi) {
         this.versionApi = versionApi;
     }
 
-    @Override
     public List<Release> getReleases() {
         var versions = versionApi.getVersions().stream()
                 .filter(Version::released).filter(v -> v.releaseDate() != null)

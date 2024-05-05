@@ -10,7 +10,21 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="$USER_HOME$/.is2/SYNCOPE/releases.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/src/main/resources/AVRO/issues.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/src/main/resources/AVRO/releases.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
@@ -24,14 +38,21 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="/src/main/resources/OPENJPA/releases.csv">
+        <entry key="/src/main/resources/SYNCOPE/issues.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
             </Attribute>
           </value>
         </entry>
-        <entry key="/src/main/resources/SYNCOPE/issues.csv">
+        <entry key="/src/main/resources/SYNCOPE/issues.old.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/src/main/resources/SYNCOPE/labelled_issues.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />
