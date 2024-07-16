@@ -21,10 +21,10 @@ public class NewIncremental implements Proportion {
         var labeled = ProportionUtils.getLabeledIssues(issues);
         var unlabeled = ProportionUtils.getUnlabeledIssues(issues);
         var p = ProportionUtils.calculateProportion(labeled);
-        var issues = new ArrayList<>(labeled);
+        var all = new ArrayList<>(labeled);
         for (var issue : unlabeled) {
-            issues.add(ProportionUtils.calculateAffectedVersions(issue, p, releases));
+            all.add(ProportionUtils.calculateAffectedVersions(issue, p, releases));
         }
-        return issues;
+        return all;
     }
 }

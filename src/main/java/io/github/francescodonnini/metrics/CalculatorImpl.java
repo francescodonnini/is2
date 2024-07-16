@@ -3,8 +3,10 @@ package io.github.francescodonnini.metrics;
 import io.github.francescodonnini.model.Entry;
 import io.github.francescodonnini.model.Release;
 import io.github.francescodonnini.utils.FileUtils;
+import org.apache.commons.lang3.builder.Diff;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
@@ -20,6 +22,7 @@ public class CalculatorImpl implements Calculator {
     private final Logger logger = Logger.getLogger(CalculatorImpl.class.getName());
     private final Git git;
     private final List<Release> releases;
+    private final HashSet<String> changeSet = new HashSet<>();
 
     public CalculatorImpl(List<Release> releases, Git git) {
         this.releases = new ArrayList<>(releases);
@@ -51,77 +54,17 @@ public class CalculatorImpl implements Calculator {
             var commits = StreamSupport.stream(git.log().call().spliterator(), false)
                     .sorted(Comparator.comparing(this::getCommitTime))
                     .toList();
-            var changeSet = new HashSet<String>();
             for (var commit : commits) {
                 // Si prende la release a cui quel commit appartiene.
                 // Se non esiste una release disponibile si scarta il commit.
                 var o = getReleaseByCommit(commit);
-                if (o.isEmpty()) {
-                    continue;
-                }
-                var release = o.get();
-                // Si prende la lista delle entries afferenti a release.
-                // Queste sono le entries che possono essere influenzate dal commit che si sta analizzando.
-                // Se non ci sono entries afferenti a release allora si scarta il commit.
-                var susceptibles = mapping.get(release.releaseNumber());
-                if (susceptibles == null || susceptibles.isEmpty()) {
-                    continue;
-                }
-                // Un commit è una lista di modifiche fatte a uno o più file, è necessario iterare
-                // tra le modifiche (diff) per raccogliere le metriche.
-                RevCommit parent = null;
-                try {
-                    parent = commit.getParent(0);
-                } catch (IndexOutOfBoundsException e) {
-                    logger.log(Level.INFO, "Commit %s has no parent".formatted(commit));
-                }
-                if (parent == null) {
-                    continue;
-                }
-                var df = new DiffFormatter(DisabledOutputStream.INSTANCE);
-                df.setRepository(git.getRepository());
-                df.setDetectRenames(true);
-                var diffs = df.scan(parent.getTree(), commit.getTree());
-                for (var diff : diffs) {
-                    var path = diff.getNewPath();
-                    // Se il percorso del file modificato non è un file .java allora non è necessario analizzare
-                    // la modifica.
-                    if (!FileUtils.isJavaNonTestFile(path)) {
-                        continue;
-                    }
-                    changeSet.add(path);
-                    // I file potrebbero essere stati rinominati ed è necessario quindi aggiornare tutte le entry che hanno
-                    // il vecchio percorso. Bisogna controllare se il vecchio path è diverso da /dev/null dato che in tal caso non è necessario fare alcune
-                    // operazione perché significa che il file non esisteva prima di quel commit.
-                    var oldPath = diff.getOldPath();
-                    if (!oldPath.equals("/dev/null") && !oldPath.equals(path)) {
-                        renameAllEntries(entries, oldPath, path);
-                    }
-                    var optionalEntry = susceptibles.stream().filter(it -> it.getPath().contains(path)).findFirst();
-                    // Se non esiste alcuna entry con quel percorso allora non è necessario analizzare la modifica.
-                    if (optionalEntry.isEmpty()) {
-                        continue;
-                    }
-                    var entry = optionalEntry.get();
-                    // A questo punto si può analizzare come il commit in questione ha modificato la entry.
-                    // Un commit contiene le seguenti informazioni utili:
-                    // - autore (email).
-                    // - linee di codice aggiunte/eliminate.
-                    var del = 0;
-                    var add = 0;
-                    for (var edit : df.toFileHeader(diff).toEditList()) {
-                        del += edit.getEndA() - edit.getBeginA();
-                        add += edit.getEndB() - edit.getBeginB();
-                    }
-                    entry.addChurn(add - del);
-                    entry.addLocTouched(add + del);
-                    entry.addLocAdded(add);
-                    entry.addLocDeleted(del);
-                    entry.incNumOfRevisions();
-                    var author = getAuthor(commit);
-                    author.ifPresent(entry::addAuthor);
-                    entry.setChangeSetSize(changeSet.size());
-                    changeSet.clear();
+                if (o.isPresent()) {
+                    var release = o.get();
+                    // Si prende la lista delle entries afferenti a release.
+                    // Queste sono le entries che possono essere influenzate dal commit che si sta analizzando.
+                    // Se non ci sono entries afferenti a release allora si scarta il commit.
+                    var susceptibles = mapping.get(release.releaseNumber());
+                    updateEntries(entries, susceptibles, commit);
                 }
             }
             calculateAverages(mapping);
@@ -132,6 +75,79 @@ public class CalculatorImpl implements Calculator {
         }
     }
 
+    private void updateEntries(List<Entry> entries, List<Entry> susceptibles, RevCommit commit) throws IOException {
+        if (susceptibles != null && !susceptibles.isEmpty()) {
+            // Un commit è una lista di modifiche fatte a uno o più file, è necessario iterare
+            // tra le modifiche (diff) per raccogliere le metriche.
+            var optionalParent = getParent(commit);
+            if (optionalParent.isPresent()) {
+                var parent = optionalParent.get();
+                parseDiffs(entries, susceptibles, parent, commit);
+            }
+        }
+    }
+
+    private void parseDiffs(List<Entry> entries, List<Entry> susceptibles, RevCommit parent, RevCommit commit) throws IOException {
+        var df = new DiffFormatter(DisabledOutputStream.INSTANCE);
+        df.setRepository(git.getRepository());
+        df.setDetectRenames(true);
+        var diffs = df.scan(parent.getTree(), commit.getTree());
+        for (var diff : diffs) {
+            var path = diff.getNewPath();
+            // Se il percorso del file modificato non è un file .java allora non è necessario analizzare
+            // la modifica.
+            if (FileUtils.isJavaNonTestFile(path)) {
+                changeSet.add(path);
+                // I file potrebbero essere stati rinominati ed è necessario quindi aggiornare tutte le entry che hanno
+                // il vecchio percorso. Bisogna controllare se il vecchio path è diverso da /dev/null dato che in tal caso non è necessario fare alcune
+                // operazione perché significa che il file non esisteva prima di quel commit.
+                var oldPath = diff.getOldPath();
+                if (!oldPath.equals("/dev/null") && !oldPath.equals(path)) {
+                    renameAllEntries(entries, oldPath, path);
+                }
+                var optionalEntry = susceptibles.stream().filter(it -> it.getPath().contains(path)).findFirst();
+                // Se non esiste alcuna entry con quel percorso allora non è necessario analizzare la modifica.
+                if (optionalEntry.isEmpty()) {
+                    continue;
+                }
+                var entry = optionalEntry.get();
+                // A questo punto si può analizzare come il commit in questione ha modificato la entry.
+                // Un commit contiene le seguenti informazioni utili:
+                // - autore (email).
+                // - linee di codice aggiunte/eliminate.
+                updateEntry(df, diff, commit, entry);
+            }
+        }
+    }
+
+    private void updateEntry(DiffFormatter df, DiffEntry diff, RevCommit commit, Entry entry) throws IOException {
+        var del = 0;
+        var add = 0;
+        for (var edit : df.toFileHeader(diff).toEditList()) {
+            del += edit.getEndA() - edit.getBeginA();
+            add += edit.getEndB() - edit.getBeginB();
+        }
+        entry.addChurn(add - del);
+        entry.addLocTouched(add + del);
+        entry.addLocAdded(add);
+        entry.addLocDeleted(del);
+        entry.incNumOfRevisions();
+        var author = getAuthor(commit);
+        author.ifPresent(entry::addAuthor);
+        entry.setChangeSetSize(changeSet.size());
+        changeSet.clear();
+    }
+
+    private Optional<RevCommit> getParent(RevCommit commit) {
+        try {
+            return Optional.ofNullable(commit.getParent(0));
+        } catch (IndexOutOfBoundsException e) {
+            logger.log(Level.INFO, "Commit %s has no parent".formatted(commit));
+            return Optional.empty();
+        }
+    }
+
+
     /*
      * calcola le metriche:
      * - [x] Average Change Set Size
@@ -141,8 +157,8 @@ public class CalculatorImpl implements Calculator {
         var averages = new HashMap<String, Integer>();
         var maximums = new HashMap<String, Integer>();
         var numOfSamples = new HashMap<String, Integer>();
-        var releases = mapping.keySet().stream().sorted(Integer::compareTo).toList();
-        for (var r : releases) {
+        var keys = mapping.keySet().stream().sorted(Integer::compareTo).toList();
+        for (var r : keys) {
             var entries = mapping.get(r);
             for (var e : entries) {
                 var path = e.getPath();

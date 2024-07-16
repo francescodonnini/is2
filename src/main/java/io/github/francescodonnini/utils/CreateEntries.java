@@ -3,7 +3,6 @@ package io.github.francescodonnini.utils;
 import io.github.francescodonnini.metrics.JavaClassUtils;
 import io.github.francescodonnini.metrics.JavaMethod;
 import io.github.francescodonnini.model.Entry;
-import io.github.francescodonnini.model.Issue;
 import io.github.francescodonnini.model.Release;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -25,7 +24,7 @@ public class CreateEntries {
     // releases è la lista delle release da cui selezionare i file per le entry.
     private final List<Release> releases;
 
-    public CreateEntries(String repositoryPath, List<Issue> issues, List<Release> releases) {
+    public CreateEntries(String repositoryPath, List<Release> releases) {
         this.repositoryPath = repositoryPath;
         this.releases = releases;
     }
@@ -43,7 +42,7 @@ public class CreateEntries {
     // Ci si aspetta che il naming delle release scelte da Jira sia consistente con il naming dei tag su github.
     private List<Entry> createEntries() throws IOException, GitAPIException {
         var repository = new FileRepositoryBuilder()
-                .setGitDir(new File(repositoryPath + "/.git"))
+                .setGitDir(new File(repositoryPath, ".git"))
                 .build();
         var git = new Git(repository);
         var current = repository.getBranch();

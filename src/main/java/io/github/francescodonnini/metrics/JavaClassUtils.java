@@ -1,13 +1,8 @@
 package io.github.francescodonnini.metrics;
 
-import com.github.javaparser.ParseProblemException;
-import com.github.javaparser.StaticJavaParser;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.MethodTree;
-import com.sun.source.tree.ModifiersTree;
-import com.sun.source.tree.Tree;
 import com.sun.source.util.JavacTask;
-import com.sun.source.util.SourcePositions;
 import com.sun.source.util.Trees;
 
 import javax.tools.JavaCompiler;
@@ -20,11 +15,12 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 public class JavaClassUtils {
     private static final Logger logger = Logger.getLogger(JavaClassUtils.class.getName());
     private static final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+
+    private JavaClassUtils() {}
 
     public static List<JavaMethod> getMethods(Path path) {
         try (final var fileMan = compiler.getStandardFileManager(null, null, StandardCharsets.UTF_8)) {
@@ -41,10 +37,8 @@ public class JavaClassUtils {
                     .toList();
             final var javaMethods = new ArrayList<JavaMethod>();
             methods.forEach(m -> {
-                System.out.println(m.getName());
                 var start = srcPositions.getStartPosition(cuTree, m);
                 var end = srcPositions.getEndPosition(cuTree, m);
-                System.out.println(end - start);
                 javaMethods.add(new JavaMethod(m.getName().toString(), end - start));
 
             });

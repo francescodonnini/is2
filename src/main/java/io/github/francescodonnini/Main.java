@@ -58,7 +58,7 @@ public class Main {
         issues = proportion.fillOut();
         // localIssueApi.saveLocal(issues, path + "/labelled_issues.csv");
         var localEntriesApi = new CsvEntryApi(path + "/entries.csv", releaseApi);
-        var entryUtils = new CreateEntries(projectPath, issues, releases);
+        var entryUtils = new CreateEntries(projectPath, releases);
         var entries = entryUtils.getEntries();
         var repository = new FileRepositoryBuilder()
                 .setGitDir(new File(repositoryPath))

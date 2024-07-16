@@ -52,13 +52,13 @@ public class AssignBuggyness {
                 .toList();
         try {
             return fillBuggyness(list);
-        } catch (IOException | GitAPIException e) {
+        } catch (IOException e) {
             logger.log(Level.INFO, e.getMessage());
             return List.of();
         }
     }
 
-    private List<Entry> fillBuggyness(List<Entry> entries) throws IOException, GitAPIException {
+    private List<Entry> fillBuggyness(List<Entry> entries) throws IOException {
         var repository = new FileRepositoryBuilder()
                 .setGitDir(new File(path))
                 .build();

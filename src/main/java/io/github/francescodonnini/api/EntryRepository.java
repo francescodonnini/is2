@@ -17,7 +17,7 @@ public class EntryRepository implements EntryApi {
     private final CsvEntryApi localSource;
     private final CreateEntries assignBuggyness;
 
-    public EntryRepository(CreateEntries createEntries, CsvEntryApi localSource) throws IOException {
+    public EntryRepository(CreateEntries createEntries, CsvEntryApi localSource) {
         this.localSource = localSource;
         this.assignBuggyness = createEntries;
     }
