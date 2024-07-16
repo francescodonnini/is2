@@ -46,7 +46,7 @@ public class JavaClassUtils {
         } catch (IOException e) {
             logger.log(Level.INFO, e.getMessage());
         } catch (NoSuchElementException e) {
-            logger.log(Level.INFO, "empty class %s\n".formatted(path));
+            logger.log(Level.INFO, "empty class %s%n".formatted(path));
         }
         return List.of();
     }

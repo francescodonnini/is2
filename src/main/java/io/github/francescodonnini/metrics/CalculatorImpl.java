@@ -3,7 +3,6 @@ package io.github.francescodonnini.metrics;
 import io.github.francescodonnini.model.Entry;
 import io.github.francescodonnini.model.Release;
 import io.github.francescodonnini.utils.FileUtils;
-import org.apache.commons.lang3.builder.Diff;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffEntry;

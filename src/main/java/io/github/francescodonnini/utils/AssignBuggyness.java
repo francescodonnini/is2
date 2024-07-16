@@ -3,9 +3,10 @@ package io.github.francescodonnini.utils;
 import io.github.francescodonnini.model.Entry;
 import io.github.francescodonnini.model.Issue;
 import io.github.francescodonnini.model.Release;
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 
@@ -73,11 +74,6 @@ public class AssignBuggyness {
         var buggyClasses = new ArrayList<Entry>();
         for (var issue : list) {
             for (var commit : issue.commits()) {
-                var df = new DiffFormatter(DisabledOutputStream.INSTANCE);
-                df.setRepository(repository);
-                df.setDiffComparator(RawTextComparator.DEFAULT);
-                df.setDetectRenames(true);
-                var diffs = df.scan(commit.getParent(0).getId(), commit.getTree());
                 // classes sono le entry potenzialmente interessate dal ticket
                 var classes = new ArrayList<Entry>();
                 issue.affectedVersions().forEach(v -> {
@@ -85,18 +81,7 @@ public class AssignBuggyness {
                         classes.addAll(mapping.get(v.releaseNumber()));
                     }
                 });
-                for (var diff : diffs) {
-                    // Percorso del file modificato da un commit afferente a issue.
-                    var file = diff.getNewPath();
-                    if (FileUtils.isJavaNonTestFile(file)) {
-                        continue;
-                    }
-                    var targets = classes.stream()
-                            .filter(c -> file.contains(c.getPath()))
-                            .map(e -> e.withBuggy(true))
-                            .toList();
-                    buggyClasses.addAll(targets);
-                }
+                parseDiffs(classes, buggyClasses, repository, commit);
             }
         }
         // Si scorrono tutte le entry da entries e si aggiornano quelle che si è scoperto essere buggy
@@ -111,6 +96,26 @@ public class AssignBuggyness {
             }
         }
         return all;
+    }
+
+    private void parseDiffs(List<Entry> classes, List<Entry> buggyClasses, Repository repository, RevCommit commit) throws IOException {
+        var df = new DiffFormatter(DisabledOutputStream.INSTANCE);
+        df.setRepository(repository);
+        df.setDiffComparator(RawTextComparator.DEFAULT);
+        df.setDetectRenames(true);
+        var diffs = df.scan(commit.getParent(0).getId(), commit.getTree());
+        for (var diff : diffs) {
+            // Percorso del file modificato da un commit afferente a issue.
+            var file = diff.getNewPath();
+            if (FileUtils.isJavaNonTestFile(file)) {
+                continue;
+            }
+            var targets = classes.stream()
+                    .filter(c -> file.contains(c.getPath()))
+                    .map(e -> e.withBuggy(true))
+                    .toList();
+            buggyClasses.addAll(targets);
+        }
     }
 
     // Seleziona un sottoinsieme di issues in funzione dell'intervallo delle release selezionato.

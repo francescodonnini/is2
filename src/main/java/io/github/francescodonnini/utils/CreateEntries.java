@@ -71,8 +71,8 @@ public class CreateEntries {
     // createEntry legge un file in path afferente a release (si assume che quando invocato il metodo è stato fatto
     // checkout allo snapshot della repository indicato da release).
     private Optional<Entry> createEntry(Path path, Release release) {
-        var realPath = repositoryPath + "/" + path;
-        try (var in = new LineNumberReader(new FileReader(realPath))) {
+        var realPath = Path.of(repositoryPath, path.toString());
+        try (var in = new LineNumberReader(new FileReader(realPath.toFile()))) {
             // Non sempre ci si sposta alla fine del file invocando skip con il valore dell'intero massimo, potrebbe
             // essere necessario effettuare più invocazioni.
             while (in.skip(Long.MAX_VALUE) > 0);
@@ -80,7 +80,7 @@ public class CreateEntries {
             var entry = new Entry(false, path.toString(), release);
             entry.setLoc(in.getLineNumber());
             entry.setAge(release.releaseNumber());
-            var methods = JavaClassUtils.getMethods(Path.of(realPath));
+            var methods = JavaClassUtils.getMethods(realPath);
             entry.setNumOfMethods(methods.size());
             entry.setAverageLocOfMethods(getAvgLocOfMethods(methods));
             return Optional.of(entry);
