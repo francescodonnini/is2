@@ -3,6 +3,7 @@ package io.github.francescodonnini.json;
 import io.github.francescodonnini.api.ReleaseApi;
 import io.github.francescodonnini.git.GitLog;
 import io.github.francescodonnini.jira.JiraRestApi;
+import io.github.francescodonnini.json.issue.FixVersion;
 import io.github.francescodonnini.json.issue.IssueNetworkEntity;
 import io.github.francescodonnini.model.Issue;
 import io.github.francescodonnini.model.Release;
@@ -58,7 +59,7 @@ public class JsonIssueApi  {
                 // Al momento sto prendendo come fixVersion la prima release (ordine cronologico) nel campo fixVersions
                 // Un'alternativa potrebbe essere quella di prendere come fixVersion la prima utile che ha data di rilascio
                 // >= alla data di risoluzione.
-                var o1 = getFixVersion(releases, i.getFields().getResolutionDate());
+                var o1 = getFixVersion(releases, i.getFields().getFixVersions());
                 var o2 = getOpeningVersion(releases, i.getFields().getCreated());
                 if (o1.isEmpty() || o2.isEmpty()) continue;
                 // Arrivati a questo punto si sta leggendo un ticket che possiede il campo fixVersions non vuoto.
@@ -116,14 +117,13 @@ public class JsonIssueApi  {
         return !openingVersion.isAfter(fixVersion);
     }
 
-    /**
-     * getFixVersion assegna al ticket la release in cui il relativo bug è stato risolto.
-     * @param releases lista delle release, si utilizza per selezionare un eventuale fixVersion.
-     * @param resolutionDate data in cui il ticket è stato risolto,
-     * @return la fixVersion se possibile altrimenti Optional.empty()
-     */
-    private Optional<Release> getFixVersion(List<Release> releases, LocalDateTime resolutionDate) {
-        return releases.stream().filter(r -> r.releaseDate().isAfter(resolutionDate.toLocalDate())).findFirst();
+    private Optional<Release> getFixVersion(List<Release> releases, List<FixVersion> fixVersions) {
+        try {
+            var fixVersion = fixVersions.getLast();
+            return releases.stream().filter(r -> r.id().equals(fixVersion.getId())).findFirst();
+        } catch (NoSuchElementException ignored) {
+            return Optional.empty();
+        }
     }
 
     /**

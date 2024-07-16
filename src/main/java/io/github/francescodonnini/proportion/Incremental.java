@@ -10,28 +10,20 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Incremental implements Proportion {
-    private final IssueApi issueApi;
-    private final ReleaseApi releaseApi;
+    private final List<Issue> issues;
+    private final List<Release> releases;
 
-    public Incremental(IssueApi issueApi, ReleaseApi releaseApi) {
-        this.issueApi = issueApi;
-        this.releaseApi = releaseApi;
+    public Incremental(List<Issue> issues, List<Release> releases) {
+        this.issues = issues;
+        this.releases = releases;
     }
 
     @Override
     public List<Issue> fillOut() {
-        var releases = releaseApi.getReleases();
-        var l = issueApi.getIssues();
         // labeled è l'insieme degli issue che hanno affectedVersions != [] e fanno parte di un release superiore alla prima.
-        var labeled = l.stream()
-                .filter(i -> !i.affectedVersions().isEmpty() && i.fixVersion().releaseNumber() > 0)
-                .sorted(Comparator.comparing(Issue::created))
-                .toList();
+        var labeled = ProportionUtils.getLabeledIssues(issues);
         // unlabeled è l'insieme degli issue che hanno affectedVersions = [] e fanno parte di un release superiore alla prima.
-        var unlabeled = l.stream()
-                .filter(i -> i.affectedVersions().isEmpty() && i.fixVersion().releaseNumber() > 0)
-                .sorted(Comparator.comparing(Issue::created))
-                .toList();
+        var unlabeled = ProportionUtils.getUnlabeledIssues(issues);
         // issues è l'insieme degli issues risultante: tutti gli elementi devono avere il campo affectedVersions non vuoto, che
         // sia già presente o calcolato col proportion.
         var issues = new ArrayList<>(labeled);
@@ -40,29 +32,9 @@ public class Incremental implements Proportion {
             // batch è l'insieme degli issue che si utilizza per calcolare P
             // contiene tutti gli issue che hanno fixVersion <= di fixVersion di issue
             var batch = labeled.stream().filter(i -> i.fixVersion().releaseNumber() < fixVersion.releaseNumber()).toList();
-            var p = calculateProportion(batch);
-            var fv = issue.fixVersion().releaseNumber();
-            var ov = issue.openingVersion().releaseNumber();
-            var den = ((fv - ov) == 0) ? 1 : (fv - ov);
-            var iv = (int) Math.floor(fv - den*p);
-            issues.add(issue.withAffectedVersions(getRange(releases, iv, ov)));
+            var p = ProportionUtils.calculateProportion(batch);
+            issues.add(ProportionUtils.calculateAffectedVersions(issue, p, releases));
         }
         return issues;
-    }
-
-    private List<Release> getRange(List<Release> releases, int start, int endInclusive) {
-        return releases.stream().filter(r -> r.releaseNumber() >= start && r.releaseNumber() <= endInclusive).toList();
-    }
-
-    private double calculateProportion(List<Issue> batch) {
-        var sum = 0.0;
-        for (var i : batch) {
-            var fv = (double) i.fixVersion().releaseNumber();
-            var ov = (double) i.openingVersion().releaseNumber();
-            var den = fv - ov == 0 ? 1 : fv - ov;
-            var iv = (double) i.getInjectedVersion().releaseNumber();
-            sum += (fv - iv)/(den);
-        }
-        return sum / batch.size();
     }
 }

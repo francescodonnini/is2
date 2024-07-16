@@ -1,0 +1,9 @@
+
+t
+java:S3776D"RRefactor this method to reduce its Cognitive Complexity from 20 to the 15 allowed.(•íôóþÿÿÿÿ8ã¨·Çõ1
+§
+java:S1130D"„Remove the declaration of thrown exception 'org.eclipse.jgit.api.errors.GitAPIException', as it cannot be thrown from method's body.(•íôóþÿÿÿÿ8é¨·Çõ1
+a
+java:S1128"DRemove this unused import 'io.github.francescodonnini.api.IssueApi'.(ºçØ¡8—©·Çõ1
+h
+java:S1128"FRemove this unused import 'io.github.francescodonnini.api.ReleaseApi'.(š€ì˜þÿÿÿÿ8˜©·Çõ1

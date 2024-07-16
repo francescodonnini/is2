@@ -2,6 +2,7 @@ package io.github.francescodonnini.csv;
 
 import com.opencsv.bean.CsvToBeanBuilder;
 import com.opencsv.bean.StatefulBeanToCsvBuilder;
+import com.opencsv.enums.CSVReaderNullFieldIndicator;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import io.github.francescodonnini.csv.entities.VersionLocalEntity;
@@ -32,6 +33,7 @@ public class CsvVersionApi {
     private List<Version> getVersions(String path) throws FileNotFoundException {
         var beans = new CsvToBeanBuilder<VersionLocalEntity>(new FileReader(path))
                 .withType(VersionLocalEntity.class)
+                .withFieldAsNull(CSVReaderNullFieldIndicator.EMPTY_QUOTES)
                 .build()
                 .parse();
         return beans.stream().map(this::fromCsv).toList();

@@ -71,5 +71,10 @@
             <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.javaparser</groupId>
+            <artifactId>javaparser-core</artifactId>
+            <version>LATEST</version>
+        </dependency>
     </dependencies>
 </project>
