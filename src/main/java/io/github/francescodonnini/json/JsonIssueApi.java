@@ -119,7 +119,7 @@ public class JsonIssueApi  {
 
     private Optional<Release> getFixVersion(List<Release> releases, List<FixVersion> fixVersions) {
         try {
-            var fixVersion = fixVersions.getLast();
+            var fixVersion = fixVersions.getFirst();
             return releases.stream().filter(r -> r.id().equals(fixVersion.getId())).findFirst();
         } catch (NoSuchElementException ignored) {
             return Optional.empty();

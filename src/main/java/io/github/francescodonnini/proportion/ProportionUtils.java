@@ -5,16 +5,21 @@ import io.github.francescodonnini.model.Release;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 
 public class ProportionUtils {
     private ProportionUtils() {}
 
-    public static Issue calculateAffectedVersions(Issue issue, double p, List<Release> releases) {
+    public static Optional<Issue> calculateAffectedVersions(Issue issue, double p, List<Release> releases) {
         var fv = issue.fixVersion().releaseNumber();
         var ov = issue.openingVersion().releaseNumber();
         var den = ((fv - ov) == 0) ? 1 : (fv - ov);
         var iv = (int) Math.floor(fv - den*p);
-        return issue.withAffectedVersions(getRange(releases, iv, ov));
+        var av = getRange(releases, iv, ov);
+        if (av.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(issue.withAffectedVersions(av));
     }
 
     private static List<Release> getRange(List<Release> releases, int start, int endInclusive) {

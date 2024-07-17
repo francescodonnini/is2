@@ -23,7 +23,7 @@ public class NewIncremental implements Proportion {
         var p = ProportionUtils.calculateProportion(labeled);
         var all = new ArrayList<>(labeled);
         for (var issue : unlabeled) {
-            all.add(ProportionUtils.calculateAffectedVersions(issue, p, releases));
+            ProportionUtils.calculateAffectedVersions(issue, p, releases).ifPresent(all::add);
         }
         return all;
     }

@@ -30,7 +30,7 @@ public class Incremental implements Proportion {
             // contiene tutti gli issue che hanno fixVersion <= di fixVersion di issue
             var batch = labeled.stream().filter(i -> i.fixVersion().releaseNumber() < fixVersion.releaseNumber()).toList();
             var p = ProportionUtils.calculateProportion(batch);
-            all.add(ProportionUtils.calculateAffectedVersions(issue, p, releases));
+            ProportionUtils.calculateAffectedVersions(issue, p, releases).ifPresent(all::add);
         }
         return all;
     }

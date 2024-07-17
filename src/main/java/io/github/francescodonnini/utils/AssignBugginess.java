@@ -22,15 +22,15 @@ import java.util.logging.Logger;
 // Utility class che etichetta le entry del dataset come buggy o non buggy. L'etichettatura viene effettuata a partire dai
 // ticket, in particolare ogni ticket ha una lista di commit associati. Ogni commit modifica un insieme di file in un certo
 // istante temporale. Un'istanza è stata pensata per poter essere riutilizzata su più sottoinsiemi diversi di release.
-public class AssignBuggyness {
-    private final Logger logger = Logger.getLogger(AssignBuggyness.class.getName());
+public class AssignBugginess {
+    private final Logger logger = Logger.getLogger(AssignBugginess.class.getName());
     private final List<Entry> entries;
     private final List<Issue> issues;
     private Release end;
     private Release start;
     private String path;
 
-    public AssignBuggyness(List<Entry> entries, List<Issue> issues) {
+    public AssignBugginess(List<Entry> entries, List<Issue> issues) {
         this.entries = entries;
         this.issues = issues;
     }
@@ -52,14 +52,14 @@ public class AssignBuggyness {
                 .filter(e -> !e.getRelease().isAfter(end))
                 .toList();
         try {
-            return fillBuggyness(list);
+            return fillBugginess(list);
         } catch (IOException e) {
             logger.log(Level.INFO, e.getMessage());
             return List.of();
         }
     }
 
-    private List<Entry> fillBuggyness(List<Entry> entries) throws IOException {
+    private List<Entry> fillBugginess(List<Entry> entries) throws IOException {
         var repository = new FileRepositoryBuilder()
                 .setGitDir(new File(path))
                 .build();
@@ -108,13 +108,12 @@ public class AssignBuggyness {
             // Percorso del file modificato da un commit afferente a issue.
             var file = diff.getNewPath();
             if (FileUtils.isJavaNonTestFile(file)) {
-                continue;
+                var targets = classes.stream()
+                        .filter(c -> file.contains(c.getPath()))
+                        .map(e -> e.withBuggy(true))
+                        .toList();
+                buggyClasses.addAll(targets);
             }
-            var targets = classes.stream()
-                    .filter(c -> file.contains(c.getPath()))
-                    .map(e -> e.withBuggy(true))
-                    .toList();
-            buggyClasses.addAll(targets);
         }
     }
 

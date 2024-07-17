@@ -1,7 +1,5 @@
 package io.github.francescodonnini;
 
-import com.github.javaparser.ParserConfiguration;
-import com.github.javaparser.StaticJavaParser;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 import io.github.francescodonnini.api.*;
@@ -17,7 +15,7 @@ import io.github.francescodonnini.json.JsonReleaseApi;
 import io.github.francescodonnini.json.JsonVersionApi;
 import io.github.francescodonnini.metrics.CalculatorImpl;
 import io.github.francescodonnini.proportion.Incremental;
-import io.github.francescodonnini.utils.AssignBuggyness;
+import io.github.francescodonnini.utils.AssignBugginess;
 import io.github.francescodonnini.utils.CreateEntries;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.eclipse.jgit.api.Git;
@@ -32,8 +30,6 @@ public class Main {
         if (args.length != 1) {
             System.exit(1);
         }
-        StaticJavaParser.getParserConfiguration().setLanguageLevel(ParserConfiguration.LanguageLevel.JAVA_21);
-        System.out.println(StaticJavaParser.getParserConfiguration().getLanguageLevel());
         var projectName = "SYNCOPE";
         var pattern = "%s-\\d+".formatted(projectName);
         var settings = new IniSettings(args[0]);
@@ -66,12 +62,12 @@ public class Main {
         var g = new Git(repository);
         var calculator = new CalculatorImpl(releases.subList(0, releases.size() / 2), g);
         entries = calculator.calculate(entries);
-        var assignBuggyness = new AssignBuggyness(entries, issues);
-        assignBuggyness.setRepository(repositoryPath);
+        var assignBugginess = new AssignBugginess(entries, issues);
+        assignBugginess.setRepository(repositoryPath);
         var trainingSetPath = "%s/tr/%d.csv";
         for (var release : releases.subList(1, releases.size())) {
-            assignBuggyness.setEnd(release);
-            var data = assignBuggyness.fill();
+            assignBugginess.setEnd(release);
+            var data = assignBugginess.fill();
             localEntriesApi.saveLocal(data, trainingSetPath.formatted(path, release.releaseNumber()));
         }
     }

@@ -25,24 +25,25 @@ public class FileUtils {
     }
 
     public static List<Path> listAllFiles(Path basePath) throws IOException {
+        var paths = new ArrayList<Path>();
+        paths.add(basePath);
         var files = new ArrayList<Path>();
-        listAllFiles(basePath, basePath, files);
-        return files;
-    }
-
-    public static void listAllFiles(Path basePath, Path currentPath, List<Path> allFiles) throws IOException
-    {
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(currentPath))
-        {
-            for (Path entry : stream) {
-                if (Files.isDirectory(entry)) {
-                    if (!Files.isHidden(entry))
-                        listAllFiles(basePath, entry, allFiles);
-                } else {
-                    allFiles.add(basePath.relativize(entry));
+        while (!paths.isEmpty()) {
+            var path = paths.removeLast();
+            try (DirectoryStream<Path> stream = Files.newDirectoryStream(path))
+            {
+                for (Path entry : stream) {
+                    if (Files.isDirectory(entry)) {
+                        if (!Files.isHidden(entry)) {
+                            paths.add(entry);
+                        }
+                    } else if (isJavaNonTestFile(entry.toString())) {
+                        files.add(basePath.relativize(entry));
+                    }
                 }
             }
         }
+        return files;
     }
 
     public static boolean isJavaNonTestFile(String path) {
@@ -50,10 +51,10 @@ public class FileUtils {
     }
 
     public static boolean isJavaFile(String path) {
-        return path.endsWith(".java");
+        return path.endsWith(".java") && !path.endsWith("package-info.java");
     }
 
     public static boolean isNonTestFile(String path) {
-        return path.contains("src/main");
+        return path.contains("src" + File.separator + "main");
     }
 }
